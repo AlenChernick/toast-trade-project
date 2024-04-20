@@ -32,7 +32,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Eye, EyeOff } from 'lucide-react';
-import { CalendarIcon } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -98,9 +98,11 @@ const SignUp: NextPage = () => {
         }
       }
 
+      toast.success('Signed up successfully.');
       router.push('/sign-in');
     } catch (error) {
       setIsLoading(false);
+      toast.error('Something went wrong.');
       console.error((error as Error).message);
     } finally {
       setIsLoading(false);
@@ -216,7 +218,6 @@ const SignUp: NextPage = () => {
                               'flex w-full justify-start text-left font-normal',
                               !date && 'text-muted-foreground'
                             )}>
-                            <CalendarIcon className='mr-2' />
                             {date ? (
                               format(date, 'PPP')
                             ) : (

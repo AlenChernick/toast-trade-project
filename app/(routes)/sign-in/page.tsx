@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState } from 'react';
@@ -71,10 +72,12 @@ const SignIn: NextPage = () => {
         }
       }
 
+      toast.success('Signed in successfully.');
       router.push('/');
       router.refresh();
     } catch (error) {
       setIsLoading(false);
+      toast.error('Something went wrong.');
       console.error((error as Error).message);
     } finally {
       setIsLoading(false);
