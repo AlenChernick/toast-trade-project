@@ -52,6 +52,7 @@ const fromSchema = z.object({
 });
 
 const SignUp: NextPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(new Date(2003, 11, 31));
 
@@ -72,6 +73,7 @@ const SignUp: NextPage = () => {
     const birthday = date ? format(date, 'yyyy-MM-dd') : '';
 
     try {
+      setIsLoading(true);
       const response = await fetch('/api/auth/sign-up', {
         method: 'POST',
         headers: {
@@ -98,7 +100,10 @@ const SignUp: NextPage = () => {
 
       router.push('/sign-in');
     } catch (error) {
+      setIsLoading(false);
       console.error((error as Error).message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,6 +127,7 @@ const SignUp: NextPage = () => {
                     <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         type='text'
                         placeholder='josh2345'
@@ -144,6 +150,7 @@ const SignUp: NextPage = () => {
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         type='text'
                         placeholder='Josh'
@@ -163,6 +170,7 @@ const SignUp: NextPage = () => {
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         type='text'
                         placeholder='Wayne'
@@ -182,6 +190,7 @@ const SignUp: NextPage = () => {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         placeholder='josh@gmail.com'
                         autoComplete='current-email'
@@ -217,6 +226,7 @@ const SignUp: NextPage = () => {
                         </PopoverTrigger>
                         <PopoverContent className='w-auto p-0'>
                           <Calendar
+                            disabled={isLoading}
                             initialFocus
                             mode='single'
                             captionLayout='dropdown-buttons'
@@ -241,6 +251,7 @@ const SignUp: NextPage = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='password'
@@ -249,6 +260,7 @@ const SignUp: NextPage = () => {
                       />
                     </FormControl>
                     <Button
+                      disabled={isLoading}
                       className='absolute top-7 right-1 flex h-8 w-8'
                       type='button'
                       size='icon'
@@ -263,7 +275,9 @@ const SignUp: NextPage = () => {
                   </FormItem>
                 )}
               />
-              <Button type='submit'>Sign up</Button>
+              <Button disabled={isLoading} type='submit'>
+                Sign up
+              </Button>
             </form>
           </Form>
         </CardContent>

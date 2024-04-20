@@ -37,6 +37,7 @@ const fromSchema = z.object({
 
 const SignIn: NextPage = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
@@ -48,6 +49,7 @@ const SignIn: NextPage = () => {
 
   const onSubmit = async (values: z.infer<typeof fromSchema>) => {
     try {
+      setIsLoading(true);
       const response = await fetch('/api/auth/sign-in', {
         method: 'POST',
         headers: {
@@ -72,7 +74,10 @@ const SignIn: NextPage = () => {
       router.push('/');
       router.refresh();
     } catch (error) {
+      setIsLoading(false);
       console.error((error as Error).message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,6 +102,7 @@ const SignIn: NextPage = () => {
                       <FormLabel>Username</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={isLoading}
                           className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                           type='text'
                           placeholder='josh2345'
@@ -117,6 +123,7 @@ const SignIn: NextPage = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={isLoading}
                         className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='password'
@@ -125,6 +132,7 @@ const SignIn: NextPage = () => {
                       />
                     </FormControl>
                     <Button
+                      disabled={isLoading}
                       className='absolute top-7 right-1 flex h-8 w-8'
                       type='button'
                       size='icon'
@@ -139,7 +147,9 @@ const SignIn: NextPage = () => {
                   </FormItem>
                 )}
               />
-              <Button type='submit'>Sign in</Button>
+              <Button disabled={isLoading} type='submit'>
+                Sign in
+              </Button>
             </form>
           </Form>
         </CardContent>

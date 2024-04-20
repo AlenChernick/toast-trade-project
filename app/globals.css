@@ -58,6 +58,6 @@
   }
 
   .main-container {
-    @apply h-full px-5;
+    @apply px-5 h-full;
   }
 }
