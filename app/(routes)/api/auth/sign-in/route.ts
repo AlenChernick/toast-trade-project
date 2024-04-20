@@ -2,11 +2,7 @@ import { NextResponse } from 'next/server';
 import { User, UserType } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
-import {
-  generateToken,
-  setTokenInCookie,
-  signOut,
-} from '@/services/auth.service';
+import { createSession, encrypt, signOut } from '@/services/auth.service';
 
 export async function POST(req: Request) {
   try {
@@ -40,9 +36,9 @@ export async function POST(req: Request) {
       updatedAt: existingUser.updatedAt,
     };
 
-    const token = generateToken({ ...user });
-
-    await setTokenInCookie(token);
+    await createSession({
+      ...user,
+    });
 
     return new NextResponse(null, { status: 200 });
   } catch (error) {

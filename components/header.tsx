@@ -1,12 +1,11 @@
-import type { CurrentUser } from '@/models/user.model';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { getCurrentUser } from '@/services/auth.service';
+import { getLoggedInUser } from '@/services/auth.service';
 import SignOutButton from './ui/sign-out-button';
 
 const Header = async () => {
-  const currentUser: CurrentUser | null = await getCurrentUser();
+  const loggedInUser = await getLoggedInUser();
 
   return (
     <header className='flex items-center justify-between px-5 py-3'>
@@ -19,7 +18,7 @@ const Header = async () => {
         <ThemeToggle />
       </section>
 
-      {!currentUser ? (
+      {!loggedInUser ? (
         <nav className='flex items-center gap-2'>
           <Link href='/sign-in' title='Sign in'>
             <Button type='button'>Sign in</Button>
@@ -31,7 +30,7 @@ const Header = async () => {
       ) : (
         <section className='flex items-center md:gap-5 gap-3'>
           <span className='md:text-base text-sm'>
-            Hello {`${currentUser.firstName}`}
+            Hello {`${loggedInUser.firstName}`}
           </span>
           <SignOutButton />
         </section>

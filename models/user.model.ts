@@ -13,6 +13,7 @@ export type UserType = {
 };
 
 export type CurrentUser = Omit<UserType, 'password'> & {
+  expiresAt: string;
   iat: number;
   exp: number;
 };

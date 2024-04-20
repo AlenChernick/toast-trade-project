@@ -1,50 +1,63 @@
 import 'server-only';
-import jwt from 'jsonwebtoken';
-import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import type { CurrentUser } from '@/models/user.model';
+import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
 const secretKey: string = process.env.JWT_SECRET_KEY as string;
+const encodedKey = new TextEncoder().encode(secretKey);
+const isSecure = process.env.NODE_ENV === 'production';
+const expiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000);
+const cookieSessionKey = 'session-toast-trade';
 
-const getTokenFromCookie: () => Promise<RequestCookie | null> = async () => {
-  return cookies().get('session-toast-trade') || null;
+const cookieOptions = {
+  httpOnly: true,
+  secure: isSecure,
+  expires: expiresAt,
+  sameSite: 'strict' as const,
+  path: '/',
 };
 
-export const generateToken = (payload: string | object | Buffer): string => {
-  return jwt.sign(payload, secretKey, { expiresIn: '1h', algorithm: 'HS256' });
+export const encrypt = async (payload: JWTPayload | undefined) => {
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('1h')
+    .sign(encodedKey);
 };
 
-export const setTokenInCookie = async (token: string) => {
-  const isSecure = process.env.NODE_ENV === 'production';
+export const createSession = async (user: JWTPayload | undefined) => {
+  const session = await encrypt({ ...user, expiresAt });
 
-  cookies().set('session-toast-trade', token, {
-    secure: isSecure,
-    httpOnly: true,
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 60 * 60,
-  });
+  cookies().set(cookieSessionKey, session, cookieOptions);
 };
 
-export const getCurrentUser: () => Promise<CurrentUser | null> = async () => {
-  const tokenCookie = await getTokenFromCookie();
+export const updateSession = async () => {
+  const session = cookies().get(cookieSessionKey)?.value;
+  const payload = await decrypt(session);
 
-  if (tokenCookie && typeof tokenCookie.value === 'string') {
-    const token = tokenCookie.value;
-
-    try {
-      const decoded = jwt.verify(token, secretKey, { algorithms: ['HS256'] });
-      return decoded as CurrentUser;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
-  } else {
-    console.error('Token is not found or not a string:', tokenCookie);
+  if (!session || !payload) {
     return null;
+  }
+
+  cookies().set(cookieSessionKey, session, cookieOptions);
+};
+
+export const getLoggedInUser = async () => {
+  const cookie = cookies().get(cookieSessionKey)?.value;
+  const loggedInUser = await decrypt(cookie);
+  return loggedInUser;
+};
+
+export const decrypt = async (session: string | undefined = '') => {
+  try {
+    const { payload } = await jwtVerify(session, encodedKey, {
+      algorithms: ['HS256'],
+    });
+    return payload;
+  } catch (error) {
+    console.log('Failed to verify session');
   }
 };
 
-export const signOut: () => Promise<void> = async () => {
-  cookies().delete('session-toast-trade');
+export const signOut = async () => {
+  cookies().delete(cookieSessionKey);
 };
