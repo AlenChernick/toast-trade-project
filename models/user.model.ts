@@ -12,6 +12,11 @@ export type UserType = {
   updatedAt?: Date;
 };
 
+export type CurrentUser = Omit<UserType, 'password'> & {
+  iat: number;
+  exp: number;
+};
+
 const UserSchema = new Schema<UserType>(
   {
     username: {

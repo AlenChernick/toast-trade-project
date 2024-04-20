@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { User, UserType } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
-import { generateToken, setTokenInCookie } from '@/services/auth.service';
+import {
+  generateToken,
+  setTokenInCookie,
+  signOut,
+} from '@/services/auth.service';
 
 export async function POST(req: Request) {
   try {
@@ -38,11 +42,21 @@ export async function POST(req: Request) {
 
     const token = generateToken({ ...user });
 
-    setTokenInCookie(token);
+    await setTokenInCookie(token);
 
     return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.log('[POST:SIGN-IN]', error);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    await signOut();
+    return new NextResponse(null, { status: 200 });
+  } catch (error) {
+    console.log('[DELETE:SIGN-IN]', error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

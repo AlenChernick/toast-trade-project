@@ -1,9 +1,14 @@
 import 'server-only';
 import jwt from 'jsonwebtoken';
 import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import type { CurrentUser } from '@/models/user.model';
 import { cookies } from 'next/headers';
 
 const secretKey: string = process.env.JWT_SECRET_KEY as string;
+
+const getTokenFromCookie: () => Promise<RequestCookie | null> = async () => {
+  return cookies().get('session-toast-trade') || null;
+};
 
 export const generateToken = (payload: string | object | Buffer): string => {
   return jwt.sign(payload, secretKey, { expiresIn: '1h', algorithm: 'HS256' });
@@ -12,7 +17,7 @@ export const generateToken = (payload: string | object | Buffer): string => {
 export const setTokenInCookie = async (token: string) => {
   const isSecure = process.env.NODE_ENV === 'production';
 
-  cookies().set('session', token, {
+  cookies().set('session-toast-trade', token, {
     secure: isSecure,
     httpOnly: true,
     sameSite: 'strict',
@@ -21,18 +26,15 @@ export const setTokenInCookie = async (token: string) => {
   });
 };
 
-const getTokenFromCookie = (): RequestCookie | null => {
-  return cookies().get('session') || null;
-};
+export const getCurrentUser: () => Promise<CurrentUser | null> = async () => {
+  const tokenCookie = await getTokenFromCookie();
 
-export const getCurrentUser: any = () => {
-  const tokenCookie = getTokenFromCookie();
   if (tokenCookie && typeof tokenCookie.value === 'string') {
     const token = tokenCookie.value;
 
     try {
       const decoded = jwt.verify(token, secretKey, { algorithms: ['HS256'] });
-      return decoded;
+      return decoded as CurrentUser;
     } catch (error) {
       console.error('Error decoding token:', error);
       return null;
@@ -41,4 +43,8 @@ export const getCurrentUser: any = () => {
     console.error('Token is not found or not a string:', tokenCookie);
     return null;
   }
+};
+
+export const signOut: () => Promise<void> = async () => {
+  cookies().delete('session-toast-trade');
 };

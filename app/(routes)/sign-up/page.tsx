@@ -16,6 +16,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -23,10 +31,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Eye, EyeOff } from 'lucide-react';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 const fromSchema = z.object({
   username: z
@@ -94,159 +103,180 @@ const SignUp: NextPage = () => {
   };
 
   return (
-    <section>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='flex flex-col justify-center max-w-80 m-auto gap-5'>
-          <FormField
-            control={form.control}
-            name='username'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input
-                    className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
-                    type='text'
-                    placeholder='josh2345'
-                    autoComplete='current-username'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This is what you will use to login
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='firstName'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input
-                    className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
-                    type='text'
-                    placeholder='Josh'
-                    autoComplete='current-first-name'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='lastName'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input
-                    className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
-                    type='text'
-                    placeholder='Wayne'
-                    autoComplete='current-last-name'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
-                    placeholder='josh@gmail.com'
-                    autoComplete='current-email'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='birthday'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Birthday</FormLabel>
-                <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'flex w-full justify-start text-left font-normal',
-                          !date && 'text-muted-foreground'
-                        )}>
-                        <CalendarIcon className='mr-2' />
-                        {date ? format(date, 'PPP') : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0'>
-                      <Calendar
-                        initialFocus
-                        mode='single'
-                        captionLayout='dropdown-buttons'
-                        fromYear={1930}
-                        toYear={2003}
-                        selected={date}
-                        onSelect={setDate}
-                        className='rounded-md border'
+    <section className='my-5'>
+      <Card className='lg:max-w-96 max-w-80 m-auto'>
+        <CardHeader className='lg:mx-1'>
+          <CardTitle>Sign up</CardTitle>
+          <CardDescription>Get started</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='flex flex-col justify-center max-w-80 m-auto gap-5'>
+              <FormField
+                control={form.control}
+                name='username'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        type='text'
+                        placeholder='josh2345'
+                        autoComplete='current-username'
+                        {...field}
                       />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field }) => (
-              <FormItem className='relative'>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder='password'
-                    autoComplete='current-password'
-                    {...field}
-                  />
-                </FormControl>
-                <Button
-                  className='absolute top-7 right-1 flex h-8 w-8'
-                  type='button'
-                  size='icon'
-                  onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? (
-                    <FaEyeSlash className='text-center text-xl' />
-                  ) : (
-                    <FaEye className='text-center text-xl' />
-                  )}
-                </Button>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type='submit'>Submit</Button>
-        </form>
-      </Form>
+                    </FormControl>
+                    <FormDescription>
+                      This is what you will use to login
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='firstName'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        type='text'
+                        placeholder='Josh'
+                        autoComplete='current-first-name'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='lastName'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        type='text'
+                        placeholder='Wayne'
+                        autoComplete='current-last-name'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        placeholder='josh@gmail.com'
+                        autoComplete='current-email'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='birthday'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Birthday</FormLabel>
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={'outline'}
+                            className={cn(
+                              'flex w-full justify-start text-left font-normal',
+                              !date && 'text-muted-foreground'
+                            )}>
+                            <CalendarIcon className='mr-2' />
+                            {date ? (
+                              format(date, 'PPP')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-auto p-0'>
+                          <Calendar
+                            initialFocus
+                            mode='single'
+                            captionLayout='dropdown-buttons'
+                            fromYear={1930}
+                            toYear={2003}
+                            selected={date}
+                            onSelect={setDate}
+                            className='rounded-md border'
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem className='relative'>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder='password'
+                        autoComplete='current-password'
+                        {...field}
+                      />
+                    </FormControl>
+                    <Button
+                      className='absolute top-7 right-1 flex h-8 w-8'
+                      type='button'
+                      size='icon'
+                      onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? (
+                        <EyeOff className='text-center text-xl' />
+                      ) : (
+                        <Eye className='text-center text-xl' />
+                      )}
+                    </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type='submit'>Sign up</Button>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className='flex justify-center gap-1 text-sm'>
+          <span>Already registered?</span>
+          <Link
+            href='/sign-in'
+            title='Sign in'
+            className='text-[#a1a1aa] font-semibold'>
+            Sign in
+          </Link>
+        </CardFooter>
+      </Card>
     </section>
   );
 };
