@@ -8,19 +8,34 @@ const corsOptions = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
+const protectedRoutes = ['/dashboard'];
+const publicRoutes = ['/sign-in', '/sign-up', '/'];
+
 export async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    path.startsWith(route)
+  );
+
+  const isPublicRoute = publicRoutes.includes(path);
+
+  const isAuthPages =
+    path.startsWith('/sign-in') || path.startsWith('/sign-up');
+
   const loggedInUser = await getLoggedInUser();
   const userId = loggedInUser?._id;
-  const isHomePage = request.nextUrl.pathname === '/';
-  const isSignInPage = request.nextUrl.pathname === '/sign-in';
-  const isSignUpPage = request.nextUrl.pathname === '/sign-up';
 
-  if (!userId && isHomePage) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (isProtectedRoute && !userId) {
+    return NextResponse.redirect(new URL('/sign-in', request.nextUrl));
   }
 
-  if (userId && (isSignInPage || isSignUpPage)) {
-    return NextResponse.redirect(new URL('/', request.url));
+  if (isAuthPages && loggedInUser) {
+    return NextResponse.redirect(new URL('/', request.nextUrl));
+  }
+
+  if (isPublicRoute) {
+    return NextResponse.next();
   }
 
   if (request.nextUrl.pathname.startsWith('/api')) {
@@ -54,5 +69,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/sign-in', '/sign-up', '/api/:path*'],
+  matcher: ['/((?!_next/static|_next/image|.*\\.png$).*)'],
 };
