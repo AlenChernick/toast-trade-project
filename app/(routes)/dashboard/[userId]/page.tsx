@@ -7,6 +7,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAuction } from '@/services/auction.service';
 import type { AuctionType } from '@/models/auction.model';
+import SkeletonCardsLoader from '@/components/skeleton-cards-loader';
+import { Suspense } from 'react';
 
 const UserDashboard = async ({
   params,
@@ -58,7 +60,12 @@ const UserDashboard = async ({
           </ScrollArea>
         </nav>
       </section>
-      {type === 'auctionList' && <AuctionsList userId={userId} />}
+
+      {type === 'auctionList' && (
+        <Suspense fallback={<SkeletonCardsLoader />}>
+          <AuctionsList userId={userId} />
+        </Suspense>
+      )}
       {type === 'createOrEditAuction' && (
         <CreateOrEditAuction
           userId={userId}

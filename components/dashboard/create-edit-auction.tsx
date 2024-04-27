@@ -62,19 +62,21 @@ const CreateOrEditAuction = ({
           .refine((val) => val >= 10, {
             message: 'Starting bid must be at least 10.',
           }),
-    endTime: z
-      .string()
-      .min(1, 'End time must be specified.')
-      .refine(
-        (value) => {
-          const minimumEndTime = addDays(new Date(), 1);
-          const endTimeDate = new Date(value);
-          return endTimeDate >= minimumEndTime;
-        },
-        {
-          message: 'End time must be at least 24 hours from now.',
-        }
-      ),
+    endTime: isEdit
+      ? z.string()
+      : z
+          .string()
+          .min(1, 'End time must be specified.')
+          .refine(
+            (value) => {
+              const minimumEndTime = addDays(new Date(), 1);
+              const endTimeDate = new Date(value);
+              return endTimeDate >= minimumEndTime;
+            },
+            {
+              message: 'End time must be at least 24 hours from now.',
+            }
+          ),
     type: z
       .string()
       .min(1, 'Please select a valid alcohol type.')
@@ -137,8 +139,10 @@ const CreateOrEditAuction = ({
 
       if (!response.ok) {
         if (isEdit) {
+          toast.error('Failed to update auction.');
           throw new Error('Failed to update auction');
         } else {
+          toast.error('Failed to create auction.');
           throw new Error('Failed to create auction');
         }
       }

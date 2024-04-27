@@ -7,18 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import React from 'react';
+
 import type { AuctionType } from '@/models/auction.model';
 import { AuctionActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 
 const AuctionsList = async ({ userId }: { userId: string }) => {
   const auctionsList = await getAuctionsList(userId);
 
   return (
-    <section className='grid md:grid-cols-2 gap-4'>
+    <section className='grid md:grid-cols-5 gap-4'>
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
           const formattedDateTime = `${auction.endTime.toDateString()} ${auction.endTime.getHours()}:${auction.endTime.getMinutes()}`;
@@ -63,7 +64,10 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
                   href={`/dashboard/${userId}?type=${AuctionActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                   <Button variant='secondary'>Edit</Button>
                 </Link>
-                <Button variant='destructive'>Delete</Button>
+                <DeleteAuctionAlert
+                  userId={userId}
+                  auctionId={auction._id.toString()}
+                />
               </CardFooter>
             </Card>
           );

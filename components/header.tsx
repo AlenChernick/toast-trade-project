@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { getLoggedInUser } from '@/services/auth.service';
-import SignOutButton from './ui/sign-out-button';
+import SignOutButton from './sign-out-button';
 
 const Header = async () => {
   const loggedInUser = await getLoggedInUser();

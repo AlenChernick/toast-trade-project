@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { Button } from './button';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 const SignOutButton = () => {
