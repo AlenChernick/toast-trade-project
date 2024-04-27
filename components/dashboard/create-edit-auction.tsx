@@ -1,7 +1,7 @@
 'use client';
 
 import { addDays, format } from 'date-fns';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -26,73 +26,93 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { alcoholTypes } from '@/constants';
-
-const formSchema = z.object({
-  itemName: z
-    .string()
-    .min(5, 'Item name must be at least 5 characters long.')
-    .max(50, 'Item name must be at most 50 characters long.')
-    .nonempty('Item name cannot be empty'),
-  itemImage: z
-    .any()
-    .refine((file) => file?.length == 1, 'Image is required.')
-    .refine((file) => file[0]?.size <= 3000000, `Max file size is 3MB.`),
-  startingBid: z
-    .string()
-    .transform((val) => {
-      const num = parseFloat(val);
-      return num;
-    })
-    .refine((val) => val >= 10, {
-      message: 'Starting bid must be at least 10.',
-    }),
-  endTime: z
-    .string()
-    .min(1, 'End time must be specified.')
-    .refine(
-      (value) => {
-        const minimumEndTime = addDays(new Date(), 1);
-        const endTimeDate = new Date(value);
-        return endTimeDate >= minimumEndTime;
-      },
-      {
-        message: 'End time must be at least 24 hours from now.',
-      }
-    ),
-  type: z
-    .string()
-    .min(1, 'Please select a valid alcohol type.')
-    .nonempty('Please select a valid alcohol type.')
-    .refine((value) => alcoholTypes.includes(value), {
-      message: 'Please select a valid alcohol type.',
-    }),
-});
+import { AuctionActionType } from '@/enum';
+import type { AuctionType } from '@/models/auction.model';
 
 const CreateOrEditAuction = ({
   userId,
   sellerName,
+  auction,
 }: {
   userId: string;
   sellerName: string;
+  auction?: AuctionType | undefined;
 }) => {
+  const isEdit = auction !== undefined;
+  const formSchema = z.object({
+    itemName: z
+      .string()
+      .min(5, 'Item name must be at least 5 characters long.')
+      .max(50, 'Item name must be at most 50 characters long.')
+      .nonempty('Item name cannot be empty'),
+    itemImage: isEdit
+      ? z.any()
+      : z
+          .any()
+          .refine((file) => file?.length == 1, 'Image is required.')
+          .refine((file) => file[0]?.size <= 3000000, `Max file size is 3MB.`),
+    startingBid: isEdit
+      ? z.number()
+      : z
+          .string()
+          .transform((val) => {
+            const num = parseFloat(val);
+            return num;
+          })
+          .refine((val) => val >= 10, {
+            message: 'Starting bid must be at least 10.',
+          }),
+    endTime: z
+      .string()
+      .min(1, 'End time must be specified.')
+      .refine(
+        (value) => {
+          const minimumEndTime = addDays(new Date(), 1);
+          const endTimeDate = new Date(value);
+          return endTimeDate >= minimumEndTime;
+        },
+        {
+          message: 'End time must be at least 24 hours from now.',
+        }
+      ),
+    type: z
+      .string()
+      .min(1, 'Please select a valid alcohol type.')
+      .nonempty('Please select a valid alcohol type.')
+      .refine((value) => alcoholTypes.includes(value), {
+        message: 'Please select a valid alcohol type.',
+      }),
+  });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      itemName: '',
-      itemImage: '',
-      startingBid: 0,
-      endTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-      type: '',
+      itemName: isEdit ? auction.itemName : '',
+      itemImage: isEdit ? auction.itemImage : '',
+      startingBid: isEdit ? auction.startingBid : 0,
+      endTime: isEdit
+        ? format(new Date(auction.endTime), "yyyy-MM-dd'T'HH:mm")
+        : format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+      type: isEdit ? auction.type : '',
     },
   });
-
   const imageFileRef = form.register('itemImage');
-
   const today = new Date();
   const minDate = format(today, "yyyy-MM-dd'T'HH:mm");
   const maxDate = format(addDays(today, 3), "yyyy-MM-dd'T'HH:mm");
+
+  useLayoutEffect(() => {
+    if (!isEdit) {
+      form.reset({
+        itemName: '',
+        itemImage: '',
+        startingBid: 0,
+        endTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+        type: '',
+      });
+    }
+  }, [isEdit, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -106,18 +126,28 @@ const CreateOrEditAuction = ({
       formData.append('endTime', values.endTime);
       formData.append('type', values.type);
       formData.append('userId', userId);
+      if (isEdit) {
+        formData.append('auctionId', auction._id);
+      }
 
       const response = await fetch('/api/dashboard/auction', {
-        method: 'POST',
+        method: isEdit ? 'PATCH' : 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create auction');
+        if (isEdit) {
+          throw new Error('Failed to update auction');
+        } else {
+          throw new Error('Failed to create auction');
+        }
       }
 
-      toast.success('Auction created successfully.');
-      form.reset();
+      toast.success(`Auction ${isEdit ? 'updated' : 'created'} successfully.`);
+
+      router.push(
+        `/dashboard/${userId}/?type=${AuctionActionType.AuctionsList}`
+      );
       router.refresh();
     } catch (error) {
       setIsLoading(false);
@@ -129,10 +159,10 @@ const CreateOrEditAuction = ({
   };
 
   return (
-    <section className='m-auto max-w-lg'>
+    <section className='max-w-lg'>
       <Card>
         <CardHeader>
-          <CardTitle>Create Auction</CardTitle>
+          <CardTitle>{`${isEdit ? 'Edit' : 'Create'}`} Auction</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -193,7 +223,7 @@ const CreateOrEditAuction = ({
                         placeholder='10'
                         min='10'
                         step='100'
-                        disabled={isLoading}
+                        disabled={isLoading || isEdit}
                         className='cursor-pointer input'
                         type='number'
                         autoComplete='Starting bid'
@@ -212,7 +242,7 @@ const CreateOrEditAuction = ({
                     <FormLabel>End time</FormLabel>
                     <FormControl>
                       <Input
-                        disabled={isLoading}
+                        disabled={isLoading || isEdit}
                         className='flex flex-col cursor-pointer input'
                         type='datetime-local'
                         autoComplete='Starting bid'
@@ -252,7 +282,7 @@ const CreateOrEditAuction = ({
                 )}
               />
               <Button disabled={isLoading} type='submit'>
-                Create
+                {`${isEdit ? 'Update' : 'Create'}`}
               </Button>
             </form>
           </Form>

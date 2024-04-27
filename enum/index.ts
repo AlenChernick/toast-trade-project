@@ -1,4 +1,4 @@
 export enum AuctionActionType {
-  CreateAuction = 'createAuction',
+  CreateOrEditAuction = 'createOrEditAuction',
   AuctionsList = 'auctionList',
 }

@@ -9,7 +9,7 @@ const Header = async () => {
 
   return (
     <header className='flex items-center justify-between px-5 py-3'>
-      <section className='flex items-center gap-3'>
+      <section className='flex items-center gap-2'>
         <Link href='/' title='Home Page'>
           <span className='text-lg font-bold hover:opacity-90 transition-opacity duration-200'>
             ToastTrade
@@ -28,7 +28,7 @@ const Header = async () => {
           </Link>
         </nav>
       ) : (
-        <nav className='flex items-center md:gap-5 gap-3'>
+        <nav className='flex items-center md:gap-5 gap-2'>
           <Link href={`/dashboard/${loggedInUser._id}`} title='Dashboard'>
             <Button type='button'>Dashboard</Button>
           </Link>

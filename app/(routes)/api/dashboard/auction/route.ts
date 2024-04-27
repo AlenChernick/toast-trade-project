@@ -53,12 +53,57 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+export async function PATCH(req: Request) {
   try {
-    await signOut();
+    await connectDB();
+
+    const formData = await req.formData();
+    const userId = formData.get('userId');
+
+    const loggedInUser = await getLoggedInUser();
+
+    if (loggedInUser?._id != userId) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+
+    const itemName = formData.get('itemName');
+    const itemImage = formData.get('itemImage');
+    const sellerName = formData.get('sellerName');
+    const endTime = formData.get('endTime');
+    const startingBid = formData.get('startingBid');
+    const currentBid = formData.get('currentBid');
+    const type = formData.get('type');
+    const auctionId = formData.get('auctionId');
+    let cloudinarySecuredURL;
+
+    if (itemImage && typeof itemImage === 'object') {
+      const buffer = await itemImage.arrayBuffer();
+      cloudinarySecuredURL = await uploadToCloudinary(buffer);
+    } else {
+      console.log('No image provided for auction creation.');
+    }
+
+    try {
+      const updatedAuction = {
+        userId,
+        itemImage: cloudinarySecuredURL,
+        sellerName,
+        currentBid,
+        itemName,
+        endTime,
+        startingBid,
+        type,
+      };
+
+      await Auction.findByIdAndUpdate(auctionId, updatedAuction);
+      console.log('Auction updated successfully.');
+    } catch (error) {
+      console.error('Error updating auction:', error);
+    }
+
     return new NextResponse(null, { status: 200 });
   } catch (error) {
-    console.log('[DELETE:SIGN-IN]', error);
+    console.log('[PATCH:UPDATE-AUCTION]', error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
