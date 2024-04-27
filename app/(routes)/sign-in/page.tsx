@@ -28,7 +28,7 @@ import { z } from 'zod';
 import { useState } from 'react';
 import Link from 'next/link';
 
-const fromSchema = z.object({
+const formSchema = z.object({
   username: z
     .string()
     .min(5, 'Username must be at least 5 characters long.')
@@ -40,15 +40,15 @@ const SignIn: NextPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const form = useForm<z.infer<typeof fromSchema>>({
-    resolver: zodResolver(fromSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
       password: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof fromSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
       const response = await fetch('/api/auth/sign-in', {

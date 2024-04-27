@@ -37,7 +37,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import Link from 'next/link';
 
-const fromSchema = z.object({
+const formSchema = z.object({
   username: z
     .string()
     .min(5, 'Username must be at least 5 characters long.')
@@ -57,8 +57,8 @@ const SignUp: NextPage = () => {
   const [date, setDate] = useState<Date | undefined>(new Date(2003, 11, 31));
 
   const router = useRouter();
-  const form = useForm<z.infer<typeof fromSchema>>({
-    resolver: zodResolver(fromSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
       firstName: '',
@@ -69,7 +69,7 @@ const SignUp: NextPage = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof fromSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const birthday = date ? format(date, 'yyyy-MM-dd') : '';
 
     try {

@@ -28,12 +28,12 @@ const Header = async () => {
           </Link>
         </nav>
       ) : (
-        <section className='flex items-center md:gap-5 gap-3'>
-          <span className='md:text-base text-sm'>
-            Hello {`${loggedInUser.firstName}`}
-          </span>
+        <nav className='flex items-center md:gap-5 gap-3'>
+          <Link href={`/dashboard/${loggedInUser._id}`} title='Dashboard'>
+            <Button type='button'>Dashboard</Button>
+          </Link>
           <SignOutButton />
-        </section>
+        </nav>
       )}
     </header>
   );
