@@ -106,7 +106,7 @@ const SignIn: NextPage = () => {
                       <FormControl>
                         <Input
                           disabled={isLoading}
-                          className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                          className='input'
                           type='text'
                           placeholder='josh2345'
                           autoComplete='current-username'
@@ -127,7 +127,7 @@ const SignIn: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='password'
                         autoComplete='current-password'

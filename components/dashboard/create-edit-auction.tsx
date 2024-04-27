@@ -150,7 +150,7 @@ const CreateOrEditAuction = ({
                       <FormControl>
                         <Input
                           disabled={isLoading}
-                          className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                          className='input'
                           type='text'
                           placeholder='Speyside Blended Malt 1973'
                           autoComplete='Item Name'
@@ -171,7 +171,7 @@ const CreateOrEditAuction = ({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='cursor-pointer focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='cursor-pointer input'
                         type='file'
                         autoComplete='Image'
                         accept='.jpg,.jpeg,.png'
@@ -194,7 +194,7 @@ const CreateOrEditAuction = ({
                         min='10'
                         step='100'
                         disabled={isLoading}
-                        className='cursor-pointer focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='cursor-pointer input'
                         type='number'
                         autoComplete='Starting bid'
                         {...field}
@@ -213,7 +213,7 @@ const CreateOrEditAuction = ({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='cursor-pointer focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='flex flex-col cursor-pointer input'
                         type='datetime-local'
                         autoComplete='Starting bid'
                         min={minDate}

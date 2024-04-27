@@ -130,7 +130,7 @@ const SignUp: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         type='text'
                         placeholder='josh2345'
                         autoComplete='current-username'
@@ -153,7 +153,7 @@ const SignUp: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         type='text'
                         placeholder='Josh'
                         autoComplete='current-first-name'
@@ -173,7 +173,7 @@ const SignUp: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         type='text'
                         placeholder='Wayne'
                         autoComplete='current-last-name'
@@ -193,7 +193,7 @@ const SignUp: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         placeholder='josh@gmail.com'
                         autoComplete='current-email'
                         {...field}
@@ -253,7 +253,7 @@ const SignUp: NextPage = () => {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='focus-visible:ring-gray-950/50 focus-visible:ring-offset-gray-950/15 focus-visible:ring-1 focus-visible:ring-offset-1 transition-ring-offset duration-300'
+                        className='input'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='password'
                         autoComplete='current-password'
