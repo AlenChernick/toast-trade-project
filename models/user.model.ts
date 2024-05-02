@@ -12,7 +12,15 @@ export type UserType = {
   updatedAt?: Date;
 };
 
-export type CurrentUser = Omit<UserType, 'password'> & {
+export type JwtUser = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type CurrentUser = JwtUser & {
   expiresAt: string;
   iat: number;
   exp: number;

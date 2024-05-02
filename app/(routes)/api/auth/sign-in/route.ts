@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { User, UserType } from '@/models/user.model';
+import { User, type UserType, type JwtUser } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
 import { createSession, encrypt, signOut } from '@/services/auth.service';
@@ -25,13 +25,10 @@ export async function POST(req: Request) {
       return new NextResponse('Invalid password', { status: 401 });
     }
 
-    const user: Omit<UserType, 'password'> & { password?: string } = {
+    const user: JwtUser = {
       _id: existingUser._id,
-      username: existingUser.username,
       firstName: existingUser.firstName,
       lastName: existingUser.lastName,
-      birthday: existingUser.birthday,
-      email: existingUser.email,
       createdAt: existingUser.createdAt,
       updatedAt: existingUser.updatedAt,
     };
