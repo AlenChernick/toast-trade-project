@@ -10,8 +10,8 @@ export type AuctionType = {
   currentBid: number;
   endTime: Date;
   type: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 const AuctionSchema = new Schema<AuctionType>(

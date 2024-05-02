@@ -1,7 +1,7 @@
 import 'server-only';
 import { getLoggedInUser } from '@/services/auth.service';
 import { Auction, type AuctionType } from '@/models/auction.model';
-import connectDB from './db.service';
+import connectDB from '@/services/db.service';
 
 export async function getAuctionsList(userId: string) {
   try {
@@ -49,6 +49,36 @@ export async function getAuction(
     } else {
       throw new Error('Failed to get auction');
     }
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+
+export async function getLatestAuctions() {
+  try {
+    await connectDB();
+
+    const currentTime = new Date();
+
+    const auctions: AuctionType[] = await Auction.find({
+      endTime: { $gt: currentTime },
+    })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean();
+
+    if (!auctions) {
+      throw new Error('Failed to get auctions');
+    }
+
+    const plainAuctions = auctions.map((auction) => {
+      return {
+        ...auction,
+        _id: auction._id.toString(),
+      };
+    });
+
+    return plainAuctions;
   } catch (error) {
     console.error((error as Error).message);
   }

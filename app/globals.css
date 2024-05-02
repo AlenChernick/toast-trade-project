@@ -69,7 +69,7 @@
   }
 
   .text-active {
-    @apply text-[#e11d48] shadow-sm transition duration-200;
+    @apply text-[#e11d48] transition duration-200;
   }
 
   .input {

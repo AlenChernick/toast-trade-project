@@ -1,24 +1,17 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+import type { NextPage } from 'next';
 
-export const Home = async () => {
+import { getLatestAuctions } from '@/services/auction.service';
+import { AuctionType } from '@/models/auction.model';
+import LatestAuctionsCarousel from '@/components/home/latest-auctions-carousel';
+
+const Home: NextPage = async () => {
+  const latestAuctions: AuctionType[] | undefined = await getLatestAuctions();
+
   return (
-    <section className='flex flex-col items-center justify-between p-24'>
+    <section className='flex flex-col items-center md:justify-between md:px-24 px-8'>
       <section className='w-full'>
-        <Carousel>
-          <CarouselContent>
-            <CarouselItem>...</CarouselItem>
-            <CarouselItem>...</CarouselItem>
-            <CarouselItem>...</CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        <h1 className='text-3xl ml-4 mb-3'>Latest auctions</h1>
+        <LatestAuctionsCarousel latestAuctions={latestAuctions} />
       </section>
     </section>
   );

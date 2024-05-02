@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAuction } from '@/services/auction.service';
 import type { AuctionType } from '@/models/auction.model';
-import SkeletonCardsLoader from '@/components/skeleton-cards-loader';
+import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
 import { Suspense } from 'react';
 
 const UserDashboard = async ({
@@ -43,7 +43,7 @@ const UserDashboard = async ({
                 className={`${
                   type === AuctionActionType.CreateOrEditAuction
                     ? 'text-active'
-                    : 'text-white'
+                    : 'dark:text-white text-black'
                 }`}>
                 Create auction
               </Link>
@@ -52,7 +52,7 @@ const UserDashboard = async ({
                 className={`${
                   type === AuctionActionType.AuctionsList
                     ? 'text-active'
-                    : 'text-white'
+                    : 'dark:text-white text-black'
                 }`}>
                 Auctions list
               </Link>
@@ -61,7 +61,7 @@ const UserDashboard = async ({
         </nav>
       </section>
       {type === 'auctionList' && (
-        <Suspense fallback={<SkeletonCardsLoader />}>
+        <Suspense key={type} fallback={<SkeletonCardsLoader />}>
           <AuctionsList userId={userId} />
         </Suspense>
       )}

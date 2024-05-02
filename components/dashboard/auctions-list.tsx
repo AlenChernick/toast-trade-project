@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
+import { getFormattedDateTimeString } from '@/lib/utils';
 
 const AuctionsList = async ({ userId }: { userId: string }) => {
   const auctionsList = await getAuctionsList(userId);
@@ -22,7 +23,7 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
     <section className='grid md:grid-cols-5 gap-4'>
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
-          const formattedDateTime = `${auction.endTime.toDateString()} ${auction.endTime.getHours()}:${auction.endTime.getMinutes()}`;
+          const formattedEndTime = getFormattedDateTimeString(auction.endTime);
           return (
             <Card key={auction._id} className='max-w-[320px]'>
               <CardHeader className='p-4'>
@@ -45,7 +46,7 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
                   <time
                     className='border-b-2 pb-1'
                     dateTime={auction.endTime.toString()}>
-                    End time: {formattedDateTime}
+                    End time: {formattedEndTime}
                   </time>
                 </CardDescription>
               </CardHeader>
