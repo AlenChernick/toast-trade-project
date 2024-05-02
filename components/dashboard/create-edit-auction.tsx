@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -104,7 +104,7 @@ const CreateOrEditAuction = ({
   const minDate = format(today, "yyyy-MM-dd'T'HH:mm");
   const maxDate = format(addDays(today, 3), "yyyy-MM-dd'T'HH:mm");
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isEdit) {
       form.reset({
         itemName: '',

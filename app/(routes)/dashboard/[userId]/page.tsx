@@ -33,7 +33,7 @@ const UserDashboard = async ({
 
   return (
     <section className='flex'>
-      <section className='md:w-44 w-52'>
+      <section className='md:w-44 w-60'>
         <nav>
           <ScrollArea>
             <div className='flex flex-col gap-2'>
@@ -60,7 +60,6 @@ const UserDashboard = async ({
           </ScrollArea>
         </nav>
       </section>
-
       {type === 'auctionList' && (
         <Suspense fallback={<SkeletonCardsLoader />}>
           <AuctionsList userId={userId} />
