@@ -55,8 +55,6 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    await connectDB();
-
     const formData = await req.formData();
     const userId = formData.get('userId');
 
@@ -65,6 +63,8 @@ export async function PATCH(req: Request) {
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    await connectDB();
 
     const itemName = formData.get('itemName');
     const itemImage = formData.get('itemImage');
@@ -114,13 +114,13 @@ export async function DELETE(req: Request) {
     const userId = searchParams.get('userId');
     const auctionId = searchParams.get('auctionId');
 
-    await connectDB();
-
     const loggedInUser = await getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    await connectDB();
 
     try {
       await Auction.findByIdAndDelete(auctionId);

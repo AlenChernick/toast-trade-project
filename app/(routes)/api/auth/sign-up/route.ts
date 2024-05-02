@@ -5,10 +5,10 @@ import connectDB from '@/services/db.service';
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
-
     const { username, firstName, lastName, email, birthday, password } =
       await req.json();
+
+    await connectDB();
 
     const existingUsername: UserType | null = await User.findOne({ username });
 

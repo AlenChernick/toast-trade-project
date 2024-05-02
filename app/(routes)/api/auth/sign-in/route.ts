@@ -6,9 +6,9 @@ import { createSession, encrypt, signOut } from '@/services/auth.service';
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
-
     const { username, password } = await req.json();
+
+    await connectDB();
 
     const existingUser: UserType | null = await User.findOne({ username });
 

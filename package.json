@@ -23,6 +23,7 @@
     "clsx": "^2.1.0",
     "cookies-next": "^4.1.1",
     "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.0.2",
     "jose": "^5.2.4",
     "lucide-react": "^0.372.0",
     "mongoose": "^8.3.2",

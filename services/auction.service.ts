@@ -5,12 +5,13 @@ import connectDB from './db.service';
 
 export async function getAuctionsList(userId: string) {
   try {
-    await connectDB();
     const loggedInUser = await getLoggedInUser();
 
     if (loggedInUser?._id !== userId) {
       throw new Error('Unauthorized');
     }
+
+    await connectDB();
 
     const auctions: AuctionType[] = await Auction.find({ userId }).lean();
 
@@ -29,12 +30,13 @@ export async function getAuction(
   auctionId: string | string[] | undefined
 ) {
   try {
-    await connectDB();
     const loggedInUser = await getLoggedInUser();
 
     if (loggedInUser?._id !== userId) {
       throw new Error('Unauthorized');
     }
+
+    await connectDB();
 
     const auction: AuctionType | null = await Auction.findOne({
       _id: auctionId,
