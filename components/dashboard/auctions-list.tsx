@@ -24,6 +24,7 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
           const formattedEndTime = getFormattedDateTimeString(auction.endTime);
+          const isActive = new Date() < new Date(auction.endTime);
           return (
             <Card key={auction._id} className='max-w-[320px]'>
               <CardHeader className='p-4'>
@@ -48,6 +49,14 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
                     dateTime={auction.endTime.toString()}>
                     End time: {formattedEndTime}
                   </time>
+                  <span className='border-b-2 pb-1'>
+                    Status:{' '}
+                    {isActive ? (
+                      <em className='not-italic text-green-400'>Active</em>
+                    ) : (
+                      <em className='not-italic text-primary'>Ended</em>
+                    )}
+                  </span>
                 </CardDescription>
               </CardHeader>
               <CardContent className='p-4 py-1'>
@@ -74,7 +83,7 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
           );
         })
       ) : (
-        <div>You didn't created auctions yet...</div>
+        <div>No auctions created yet...</div>
       )}
     </section>
   );

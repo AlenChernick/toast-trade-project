@@ -24,7 +24,12 @@ const SignOutButton = () => {
   };
 
   return (
-    <Button disabled={isLoading} onClick={handleSignOut} type='button'>
+    <Button
+      className='md:h-10 md:px-4 md:py-2'
+      size='sm'
+      disabled={isLoading}
+      onClick={handleSignOut}
+      type='button'>
       Sign out
     </Button>
   );
