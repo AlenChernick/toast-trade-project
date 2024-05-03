@@ -65,7 +65,7 @@
   }
 
   .main-container {
-    @apply px-5 h-full;
+    @apply md:px-5 px-2 h-full;
   }
 
   .text-active {

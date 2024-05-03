@@ -1,4 +1,4 @@
-import { getAuctionsList } from '@/services/auction.service';
+import { getUserAuctions } from '@/services/auction.service';
 import {
   Card,
   CardContent,
@@ -9,15 +9,15 @@ import {
 } from '@/components/ui/card';
 
 import type { AuctionType } from '@/models/auction.model';
-import { AuctionActionType } from '@/enum';
+import { DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 import { getFormattedDateTimeString } from '@/lib/utils';
 
-const AuctionsList = async ({ userId }: { userId: string }) => {
-  const auctionsList = await getAuctionsList(userId);
+const UserAuctions = async ({ userId }: { userId: string }) => {
+  const auctionsList = await getUserAuctions(userId);
 
   return (
     <section className='grid md:grid-cols-5 gap-4'>
@@ -71,7 +71,7 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
               </CardContent>
               <CardFooter className='p-4 flex justify-between'>
                 <Link
-                  href={`/dashboard/${userId}?type=${AuctionActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
+                  href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                   <Button variant='secondary'>Edit</Button>
                 </Link>
                 <DeleteAuctionAlert
@@ -89,4 +89,4 @@ const AuctionsList = async ({ userId }: { userId: string }) => {
   );
 };
 
-export default AuctionsList;
+export default UserAuctions;

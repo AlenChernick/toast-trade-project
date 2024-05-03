@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { alcoholTypes } from '@/constants';
-import { AuctionActionType } from '@/enum';
+import { DashboardActionType } from '@/enum';
 import type { AuctionType } from '@/models/auction.model';
 
 const CreateOrEditAuction = ({
@@ -150,7 +150,7 @@ const CreateOrEditAuction = ({
       toast.success(`Auction ${isEdit ? 'updated' : 'created'} successfully.`);
 
       router.push(
-        `/dashboard/${userId}/?type=${AuctionActionType.AuctionsList}`
+        `/dashboard/${userId}/?type=${DashboardActionType.UserAuctions}`
       );
       router.refresh();
     } catch (error) {

@@ -3,7 +3,7 @@ import { getLoggedInUser } from '@/services/auth.service';
 import { Auction, type AuctionType } from '@/models/auction.model';
 import connectDB from '@/services/db.service';
 
-export async function getAuctionsList(userId: string) {
+export async function getUserAuctions(userId: string) {
   try {
     const loggedInUser = await getLoggedInUser();
 

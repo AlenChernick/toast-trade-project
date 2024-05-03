@@ -1,14 +1,15 @@
-import AuctionsList from '@/components/dashboard/auctions-list';
-import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
+import type { AuctionType } from '@/models/auction.model';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { AuctionActionType } from '@/enum';
+import { DashboardActionType } from '@/enum';
 import { getLoggedInUser } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { getAuction } from '@/services/auction.service';
-import type { AuctionType } from '@/models/auction.model';
-import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
 import { Suspense } from 'react';
+import { CirclePlus, Columns3 } from 'lucide-react';
+import UserAuctions from '@/components/dashboard/user-auctions';
+import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
+import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
+import Link from 'next/link';
 
 const UserDashboard = async ({
   params,
@@ -33,39 +34,41 @@ const UserDashboard = async ({
 
   return (
     <section className='flex'>
-      <section className='md:w-44 w-60'>
+      <section className='md:w-44 w-72'>
         <nav>
           <ScrollArea>
             <div className='flex flex-col gap-2'>
               <Link
-                href={`?type=${AuctionActionType.CreateOrEditAuction}`}
-                title='Create auction'
+                href={`?type=${DashboardActionType.CreateOrEditAuction}`}
+                title={`${isEdit ? 'Edit' : 'Create'} auction`}
                 className={`${
-                  type === AuctionActionType.CreateOrEditAuction
+                  type === DashboardActionType.CreateOrEditAuction
                     ? 'text-active'
                     : 'dark:text-white text-black'
-                }`}>
-                Create auction
+                } flex gap-1 items-center`}>
+                <CirclePlus className='w-4 h-4' />
+                {`${isEdit ? 'Edit' : 'Create'} auction`}
               </Link>
               <Link
-                href={`?type=${AuctionActionType.AuctionsList}`}
+                href={`?type=${DashboardActionType.UserAuctions}`}
                 className={`${
-                  type === AuctionActionType.AuctionsList
+                  type === DashboardActionType.UserAuctions
                     ? 'text-active'
                     : 'dark:text-white text-black'
-                }`}>
-                Auctions list
+                } flex gap-1 items-center`}>
+                <Columns3 className='w-4 h-4' />
+                Your auctions
               </Link>
             </div>
           </ScrollArea>
         </nav>
       </section>
-      {type === 'auctionList' && (
+      {type === DashboardActionType.UserAuctions && (
         <Suspense key={type} fallback={<SkeletonCardsLoader />}>
-          <AuctionsList userId={userId} />
+          <UserAuctions userId={userId} />
         </Suspense>
       )}
-      {type === 'createOrEditAuction' && (
+      {type === DashboardActionType.CreateOrEditAuction && (
         <CreateOrEditAuction
           userId={userId}
           sellerName={sellerName}
