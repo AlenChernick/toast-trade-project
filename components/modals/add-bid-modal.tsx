@@ -113,9 +113,9 @@ const AddBidModal = ({
         throw new Error('Failed to add bid');
       }
 
+      form.reset();
       toast.success('Bid added successfully.');
       setOpen(false);
-      form.reset();
       router.refresh();
     } catch (error) {
       setIsLoading(false);
@@ -189,11 +189,13 @@ const AddBidModal = ({
             )}
           </div>
           {!loggedInUser && (
-            <DialogFooter className='flex gap-2'>
-              <DialogClose>Cancel</DialogClose>
-              <Link href='/sign-in' title='Sign in'>
-                <Button>Sign In</Button>
-              </Link>
+            <DialogFooter>
+              <div className='flex gap-4 justify-center'>
+                <DialogClose>Cancel</DialogClose>
+                <Link href='/sign-in' title='Sign in'>
+                  <Button>Sign In</Button>
+                </Link>
+              </div>
             </DialogFooter>
           )}
         </DialogContent>

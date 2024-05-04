@@ -13,7 +13,6 @@ const SignOutButton = () => {
       await fetch('/api/auth/sign-in', {
         method: 'DELETE',
       });
-      router.push('/sign-in');
       router.refresh();
     } catch (error) {
       setIsLoading(false);

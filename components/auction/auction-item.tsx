@@ -1,5 +1,5 @@
 'use client';
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -20,7 +20,10 @@ const AuctionItem = ({
   loggedInUser: JWTPayload | undefined;
 }) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
-  const auctionEndTime = new Date(auction.endTime);
+  const auctionEndTime = useMemo(
+    () => new Date(auction.endTime),
+    [auction.endTime]
+  );
   const auctionCreatedTime = new Date(auction.createdAt);
 
   useLayoutEffect(() => {
