@@ -6,8 +6,6 @@ import { uploadToCloudinary } from '@/services/cloudinary.service';
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
-
     const formData = await req.formData();
     const userId = formData.get('userId');
 
@@ -16,6 +14,8 @@ export async function POST(req: Request) {
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    await connectDB();
 
     const itemName = formData.get('itemName');
     const itemImage = formData.get('itemImage');
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
         itemImage: cloudinarySecuredURL,
         sellerName,
         currentBid,
+        bids: [],
         itemName,
         endTime,
         startingBid,
@@ -68,10 +69,6 @@ export async function PATCH(req: Request) {
 
     const itemName = formData.get('itemName');
     const itemImage = formData.get('itemImage');
-    const sellerName = formData.get('sellerName');
-    const endTime = formData.get('endTime');
-    const startingBid = formData.get('startingBid');
-    const currentBid = formData.get('currentBid');
     const type = formData.get('type');
     const auctionId = formData.get('auctionId');
     let cloudinarySecuredURL;
@@ -85,13 +82,8 @@ export async function PATCH(req: Request) {
 
     try {
       const updatedAuction = {
-        userId,
         itemImage: cloudinarySecuredURL,
-        sellerName,
-        currentBid,
         itemName,
-        endTime,
-        startingBid,
         type,
       };
 

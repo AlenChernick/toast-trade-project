@@ -11,10 +11,10 @@ import {
 import type { AuctionType } from '@/models/auction.model';
 import { DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
+import { getFormattedDateTimeString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
-import { getFormattedDateTimeString } from '@/lib/utils';
 
 const UserAuctions = async ({ userId }: { userId: string }) => {
   const auctionsList = await getUserAuctions(userId);
@@ -23,7 +23,11 @@ const UserAuctions = async ({ userId }: { userId: string }) => {
     <section className='grid md:grid-cols-5 gap-4'>
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
-          const formattedEndTime = getFormattedDateTimeString(auction.endTime);
+          const auctionEndTime = new Date(auction.endTime);
+          const auctionStartTime = new Date(auction.createdAt);
+          const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
+          const formattedStartTime =
+            getFormattedDateTimeString(auctionStartTime);
           const isActive = new Date() < new Date(auction.endTime);
           return (
             <Card key={auction._id} className='max-w-[320px]'>
@@ -47,7 +51,12 @@ const UserAuctions = async ({ userId }: { userId: string }) => {
                   <time
                     className='border-b-2 pb-1'
                     dateTime={auction.endTime.toString()}>
-                    End time: {formattedEndTime}
+                    Start date: {formattedStartTime}
+                  </time>
+                  <time
+                    className='border-b-2 pb-1'
+                    dateTime={auction.endTime.toString()}>
+                    End date: {formattedEndTime}
                   </time>
                   <span className='border-b-2 pb-1'>
                     Status:{' '}

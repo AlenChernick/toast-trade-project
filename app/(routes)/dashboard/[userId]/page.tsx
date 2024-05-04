@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardActionType } from '@/enum';
 import { getLoggedInUser } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
-import { getAuction } from '@/services/auction.service';
+import { getUserAuction } from '@/services/auction.service';
 import { Suspense } from 'react';
 import { CirclePlus, Columns3 } from 'lucide-react';
 import UserAuctions from '@/components/dashboard/user-auctions';
@@ -27,7 +27,7 @@ const UserDashboard = async ({
   if (userId !== loggedInUser?._id) return notFound();
 
   if (isEdit) {
-    auction = await getAuction(userId, auctionId);
+    auction = await getUserAuction(userId, auctionId);
     if (!auction) return notFound();
   }
   const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;

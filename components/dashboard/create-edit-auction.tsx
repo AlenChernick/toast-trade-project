@@ -60,7 +60,7 @@ const CreateOrEditAuction = ({
             return num;
           })
           .refine((val) => val >= 10, {
-            message: 'Starting bid must be at least 10.',
+            message: 'Starting bid must be at least 10$.',
           }),
     endTime: isEdit
       ? z.string()

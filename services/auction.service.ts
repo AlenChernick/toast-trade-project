@@ -15,17 +15,18 @@ export async function getUserAuctions(userId: string) {
 
     const auctions: AuctionType[] = await Auction.find({ userId }).lean();
 
-    if (!auctions) {
+    if (auctions) {
+      const parsedAuctions = JSON.parse(JSON.stringify(auctions));
+      return parsedAuctions;
+    } else {
       throw new Error('Failed to get auctions');
     }
-
-    return auctions;
   } catch (error) {
     console.error((error as Error).message);
   }
 }
 
-export async function getAuction(
+export async function getUserAuction(
   userId: string,
   auctionId: string | string[] | undefined
 ) {
@@ -41,11 +42,30 @@ export async function getAuction(
     const auction: AuctionType | null = await Auction.findOne({
       _id: auctionId,
       userId: userId,
+    });
+
+    if (auction) {
+      const parsedAuction = JSON.parse(JSON.stringify(auction));
+      return parsedAuction;
+    } else {
+      throw new Error('Failed to get user auction');
+    }
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+
+export async function getAuction(auctionId: string) {
+  try {
+    await connectDB();
+
+    const auction: AuctionType | null = await Auction.findOne({
+      _id: auctionId,
     }).lean();
 
     if (auction) {
-      auction._id = auction._id.toString();
-      return auction;
+      const parsedAuction = JSON.parse(JSON.stringify(auction));
+      return parsedAuction;
     } else {
       throw new Error('Failed to get auction');
     }
@@ -67,18 +87,12 @@ export async function getLatestAuctions() {
       .limit(10)
       .lean();
 
-    if (!auctions) {
+    if (auctions) {
+      const parsedAuctions = JSON.parse(JSON.stringify(auctions));
+      return parsedAuctions;
+    } else {
       throw new Error('Failed to get auctions');
     }
-
-    const plainAuctions = auctions.map((auction) => {
-      return {
-        ...auction,
-        _id: auction._id.toString(),
-      };
-    });
-
-    return plainAuctions;
   } catch (error) {
     console.error((error as Error).message);
   }

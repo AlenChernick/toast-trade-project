@@ -16,6 +16,8 @@ import {
 import Image from 'next/image';
 import { useLayoutEffect, useState } from 'react';
 import { getFormattedDateTimeString } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const LatestAuctionsCarousel = ({
   latestAuctions,
@@ -29,7 +31,8 @@ const LatestAuctionsCarousel = ({
       const now = new Date().getTime();
       const remainingTimes =
         latestAuctions?.map((auction: AuctionType) => {
-          const duration = auction.endTime.getTime() - now;
+          const auctionEndTime = new Date(auction.endTime);
+          const duration = auctionEndTime.getTime() - now;
           return duration > 0 ? duration : 0;
         }) ?? [];
       setTimeRemaining(remainingTimes);
@@ -45,12 +48,11 @@ const LatestAuctionsCarousel = ({
       <Carousel>
         <CarouselContent className='-ml-0'>
           {latestAuctions?.map((auction: AuctionType, index) => {
-            const formattedEndTime = getFormattedDateTimeString(
-              auction.endTime
-            );
-            const formattedStartTime = getFormattedDateTimeString(
-              auction.createdAt
-            );
+            const auctionEndTime = new Date(auction.endTime);
+            const auctionCreatedTime = new Date(auction.createdAt);
+            const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
+            const formattedStartTime =
+              getFormattedDateTimeString(auctionCreatedTime);
             const duration = timeRemaining[index];
             const auctionEnded = duration <= 0;
             const displayCountdown = !isNaN(duration);
@@ -149,6 +151,12 @@ const LatestAuctionsCarousel = ({
                             )}
                           </time>
                         </span>
+                        <Link
+                          href={`/auction/${auction._id}`}
+                          title={`View: ${auction.itemName}`}
+                          className='flex justify-center mt-10'>
+                          <Button>View auction</Button>
+                        </Link>
                       </CardDescription>
                     </div>
                   </CardContent>

@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Types } from 'mongoose';
 
 export type AuctionType = {
   _id: string;
@@ -8,11 +8,32 @@ export type AuctionType = {
   sellerName: string;
   startingBid: number;
   currentBid: number;
-  endTime: Date;
   type: string;
+  bids: UserBid[];
+  endTime: Date;
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UserBid = {
+  _id?: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  bid: number;
+  createdAt: Date;
+};
+
+const BidSchema = new Schema<UserBid>({
+  _id: {
+    type: Schema.Types.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
+  userId: String,
+  firstName: String,
+  lastName: String,
+  bid: Number,
+});
 
 const AuctionSchema = new Schema<AuctionType>(
   {
@@ -40,12 +61,16 @@ const AuctionSchema = new Schema<AuctionType>(
       type: Number,
       required: true,
     },
-    endTime: {
-      type: Date,
-      required: true,
-    },
     type: {
       type: String,
+      required: true,
+    },
+    bids: {
+      type: [BidSchema],
+      required: true,
+    },
+    endTime: {
+      type: Date,
       required: true,
     },
   },
