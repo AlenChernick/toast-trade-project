@@ -10,7 +10,7 @@ import { getFormattedDateTimeString } from '@/lib/utils';
 import type { AuctionType } from '@/models/auction.model';
 import type { JWTPayload } from 'jose';
 import Image from 'next/image';
-import BidAuctionModal from '@/components/modals/bid-auction-modal';
+import AddBidModal from '@/components/modals/add-bid-modal';
 
 const AuctionItem = ({
   auction,
@@ -47,10 +47,10 @@ const AuctionItem = ({
   return (
     <section className='w-full'>
       <Card className='py-7'>
-        <CardContent className='flex md:flex-row flex-col gap-5'>
+        <CardContent className='flex lg:flex-row flex-col gap-5'>
           <Image
             priority
-            className='md:h-[570px] w-[470px] h-auto md:mb-0 mb-4 rounded-md aspect-w-10:12'
+            className='md:h-[570px] w-[470px] lg:m-0 m-auto h-auto md:mb-0 mb-4 rounded-md aspect-w-10:12'
             src={auction.itemImage}
             width={900}
             height={1200}
@@ -130,7 +130,7 @@ const AuctionItem = ({
             </CardDescription>
           </div>
           {!isAuctionEnded && (
-            <BidAuctionModal loggedInUser={loggedInUser} auction={auction} />
+            <AddBidModal loggedInUser={loggedInUser} auction={auction} />
           )}
         </CardContent>
       </Card>

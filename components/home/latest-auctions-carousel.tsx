@@ -70,10 +70,10 @@ const LatestAuctionsCarousel = ({
             return (
               <CarouselItem key={auction._id}>
                 <Card className='py-7'>
-                  <CardContent className='flex md:flex-row flex-col gap-5'>
+                  <CardContent className='flex lg:flex-row flex-col gap-5'>
                     <Image
                       priority
-                      className='md:h-[570px] w-[470px] h-auto md:mb-0 mb-4 rounded-md aspect-w-10:12'
+                      className='md:h-[570px] w-[470px] m-auto lg:m-0 h-auto md:mb-0 mb-4 rounded-md aspect-w-10:12'
                       src={auction.itemImage}
                       width={900}
                       height={1200}

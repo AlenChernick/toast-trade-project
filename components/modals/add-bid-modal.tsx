@@ -27,7 +27,7 @@ import type { JWTPayload } from 'jose';
 import type { AuctionType } from '@/models/auction.model';
 import Link from 'next/link';
 
-const BidAuctionModal = ({
+const AddBidModal = ({
   loggedInUser,
   auction,
 }: {
@@ -74,7 +74,8 @@ const BidAuctionModal = ({
       const auctionId = auction._id;
       const auctionCreatorId = auction.userId;
       const auctionBids = auction.bids;
-      const isAuctionEnded = auction.endTime.getTime() < Date.now();
+      const auctionEndTime = new Date(auction.endTime);
+      const isAuctionEnded = auctionEndTime.getTime() < Date.now();
 
       if (isAuctionEnded) {
         toast.error('Auction ended');
@@ -130,12 +131,14 @@ const BidAuctionModal = ({
   };
 
   return (
-    <section>
+    <section className='flex justify-center'>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant='outline'>Add Bid</Button>
+          <Button variant='outline' size='lg' className='lg:h-10 lg:px-4'>
+            Add Bid
+          </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className='w-11/12'>
           <DialogHeader>
             <DialogTitle>
               {loggedInUser ? 'Are you absolutely sure?' : 'Sign in please'}
@@ -166,8 +169,12 @@ const BidAuctionModal = ({
                       </FormItem>
                     )}
                   />
-                  <DialogFooter className='flex justify-between'>
-                    <DialogClose>Cancel</DialogClose>
+                  <DialogFooter className='flex justify-between gap-4'>
+                    <DialogTrigger asChild>
+                      <Button variant='ghost' disabled={isLoading}>
+                        Cancel
+                      </Button>
+                    </DialogTrigger>
                     <Button
                       onClick={handleClose}
                       disabled={isLoading}
@@ -195,4 +202,4 @@ const BidAuctionModal = ({
   );
 };
 
-export default BidAuctionModal;
+export default AddBidModal;
