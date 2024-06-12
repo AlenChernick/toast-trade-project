@@ -1,5 +1,5 @@
 'use client';
-import { useState, useLayoutEffect, useMemo } from 'react';
+import { useState, useLayoutEffect, useMemo, type FC } from 'react';
 import {
   Card,
   CardContent,
@@ -12,13 +12,10 @@ import type { JWTPayload } from 'jose';
 import Image from 'next/image';
 import AddBidModal from '@/components/modals/add-bid-modal';
 
-const AuctionItem = ({
-  auction,
-  loggedInUser,
-}: {
+const AuctionItem: FC<{
   auction: AuctionType;
   loggedInUser: JWTPayload | undefined;
-}) => {
+}> = ({ auction, loggedInUser }) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const auctionEndTime = useMemo(
     () => new Date(auction.endTime),

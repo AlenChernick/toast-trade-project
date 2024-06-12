@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { getLoggedInUser } from '@/services/auth.service';
 import SignOutButton from './sign-out-button';
-import { cn } from '@/lib/utils';
 
 const Header = async () => {
   const loggedInUser = await getLoggedInUser();

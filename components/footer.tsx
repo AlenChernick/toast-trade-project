@@ -6,7 +6,6 @@ const Footer = () => {
   return (
     <footer className='px-5 py-3 flex justify-center w-full'>
       <hr className='border-slate-200' />
-
       <section className='flex justify-center items-center md:gap-8 gap-5'>
         <p className='text-sm md:text-base'>
           © 2024 Alen Chernick. All rights reserved.

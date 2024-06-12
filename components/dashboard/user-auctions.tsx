@@ -15,8 +15,9 @@ import { getFormattedDateTimeString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
+import type { FC } from 'react';
 
-const UserAuctions = async ({ userId }: { userId: string }) => {
+const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
   const auctionsList = await getUserAuctions(userId);
 
   return (

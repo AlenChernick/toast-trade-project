@@ -11,16 +11,13 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { type FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const DeleteAuctionAlert = ({
-  userId,
-  auctionId,
-}: {
+const DeleteAuctionAlert: FC<{
   userId: string;
   auctionId: string;
-}) => {
+}> = ({ userId, auctionId }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

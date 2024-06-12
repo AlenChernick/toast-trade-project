@@ -14,16 +14,14 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import { useLayoutEffect, useState } from 'react';
+import { type FC, useLayoutEffect, useState } from 'react';
 import { getFormattedDateTimeString, getTimeVariables } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-const LatestAuctionsCarousel = ({
-  latestAuctions,
-}: {
+const LatestAuctionsCarousel: FC<{
   latestAuctions: AuctionType[] | undefined;
-}) => {
+}> = ({ latestAuctions }) => {
   const [timeRemaining, setTimeRemaining] = useState<number[]>([]);
 
   useLayoutEffect(() => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type FC, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -27,13 +27,10 @@ import type { JWTPayload } from 'jose';
 import type { AuctionType } from '@/models/auction.model';
 import Link from 'next/link';
 
-const AddBidModal = ({
-  loggedInUser,
-  auction,
-}: {
+const AddBidModal: FC<{
   loggedInUser: JWTPayload | undefined;
   auction: AuctionType;
-}) => {
+}> = ({ loggedInUser, auction }) => {
   const currentBid = auction.currentBid;
   const formSchema = z.object({
     newBidValue: z

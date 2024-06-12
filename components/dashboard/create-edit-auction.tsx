@@ -1,7 +1,7 @@
 'use client';
 
 import { addDays, format } from 'date-fns';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -29,15 +29,11 @@ import { alcoholTypes } from '@/constants';
 import { DashboardActionType } from '@/enum';
 import type { AuctionType } from '@/models/auction.model';
 
-const CreateOrEditAuction = ({
-  userId,
-  sellerName,
-  auction,
-}: {
+const CreateOrEditAuction: FC<{
   userId: string;
   sellerName: string;
   auction?: AuctionType | undefined;
-}) => {
+}> = ({ userId, sellerName, auction }) => {
   const isEdit = auction !== undefined;
   const formSchema = z.object({
     itemName: z

@@ -1,23 +1,19 @@
 import type { AuctionType } from '@/models/auction.model';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import type { NextPage } from 'next';
 import { DashboardActionType } from '@/enum';
 import { getLoggedInUser } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
 import { getUserAuction } from '@/services/auction.service';
 import { Suspense } from 'react';
-import { CirclePlus, Columns3 } from 'lucide-react';
 import UserAuctions from '@/components/dashboard/user-auctions';
 import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
 import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
-import Link from 'next/link';
+import SideNavbar from '@/components/dashboard/side-navbar';
 
-const UserDashboard = async ({
-  params,
-  searchParams,
-}: {
+const UserDashboard: NextPage<{
   params: { userId: string };
   searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+}> = async ({ params, searchParams }) => {
   const { userId } = params;
   const { type, auctionId } = searchParams;
   const loggedInUser = await getLoggedInUser();
@@ -34,35 +30,7 @@ const UserDashboard = async ({
 
   return (
     <section className='flex'>
-      <section className='md:w-44 w-72'>
-        <nav>
-          <ScrollArea>
-            <div className='flex flex-col gap-2'>
-              <Link
-                href={`?type=${DashboardActionType.CreateOrEditAuction}`}
-                title={`${isEdit ? 'Edit' : 'Create'} auction`}
-                className={`${
-                  type === DashboardActionType.CreateOrEditAuction
-                    ? 'text-active'
-                    : 'dark:text-white text-black'
-                } flex gap-1 items-center`}>
-                <CirclePlus className='w-4 h-4' />
-                {`${isEdit ? 'Edit' : 'Create'} auction`}
-              </Link>
-              <Link
-                href={`?type=${DashboardActionType.UserAuctions}`}
-                className={`${
-                  type === DashboardActionType.UserAuctions
-                    ? 'text-active'
-                    : 'dark:text-white text-black'
-                } flex gap-1 items-center`}>
-                <Columns3 className='w-4 h-4' />
-                Your auctions
-              </Link>
-            </div>
-          </ScrollArea>
-        </nav>
-      </section>
+      <SideNavbar isEdit={isEdit} type={type} />
       {type === DashboardActionType.UserAuctions && (
         <Suspense key={type} fallback={<SkeletonCardsLoader />}>
           <UserAuctions userId={userId} />
