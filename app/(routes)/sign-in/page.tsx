@@ -86,7 +86,7 @@ const SignIn: NextPage = () => {
 
   return (
     <section className='my-5'>
-      <Card className='lg:max-w-96 max-w-80 m-auto'>
+      <Card className='lg:max-w-96 w-full md:max-w-80 m-auto'>
         <CardHeader className='lg:mx-1'>
           <CardTitle>Sign in</CardTitle>
           <CardDescription>Get connected</CardDescription>

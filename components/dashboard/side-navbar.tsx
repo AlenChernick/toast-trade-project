@@ -20,7 +20,7 @@ const SideNavbar: FC<{
                 type === DashboardActionType.CreateOrEditAuction
                   ? 'text-active'
                   : 'dark:text-white text-black'
-              } flex gap-1 items-center`}>
+              } flex gap-2 items-center`}>
               <CirclePlus className='w-4 h-4' />
               {`${isEdit ? 'Edit' : 'Create'} auction`}
             </Link>
@@ -30,7 +30,7 @@ const SideNavbar: FC<{
                 type === DashboardActionType.UserAuctions
                   ? 'text-active'
                   : 'dark:text-white text-black'
-              } flex gap-1 items-center`}>
+              } flex gap-2 items-center`}>
               <Columns3 className='w-4 h-4' />
               Your auctions
             </Link>
