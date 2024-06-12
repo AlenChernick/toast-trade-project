@@ -58,21 +58,22 @@ const CreateOrEditAuction: FC<{
           .refine((val) => val >= 10, {
             message: 'Starting bid must be at least 10$.',
           }),
-    endTime: isEdit
-      ? z.string()
-      : z
-          .string()
-          .min(1, 'End time must be specified.')
-          .refine(
-            (value) => {
-              const minimumEndTime = addDays(new Date(), 1);
-              const endTimeDate = new Date(value);
-              return endTimeDate >= minimumEndTime;
-            },
-            {
-              message: 'End time must be at least 24 hours from now.',
-            }
-          ),
+    endTime: z
+      .string()
+      .min(1, 'End time must be specified.')
+      .refine(
+        (value) => {
+          const now = new Date();
+          const minimumEndTime = addDays(now, 1);
+          const maximumEndTime = addDays(now, 3);
+          const endTimeDate = new Date(value);
+          return endTimeDate >= minimumEndTime && endTimeDate <= maximumEndTime;
+        },
+        {
+          message:
+            'End time must be at least 24 hours from now and no more than 3 days from now.',
+        }
+      ),
     type: z
       .string()
       .min(1, 'Please select a valid alcohol type.')
@@ -159,7 +160,7 @@ const CreateOrEditAuction: FC<{
   };
 
   return (
-    <section className='max-w-lg'>
+    <section className='max-w-sm m-auto md:m-0'>
       <Card>
         <CardHeader>
           <CardTitle>{`${isEdit ? 'Edit' : 'Create'}`} Auction</CardTitle>
@@ -263,6 +264,7 @@ const CreateOrEditAuction: FC<{
                     <FormLabel>Alcohol type</FormLabel>
                     <FormControl>
                       <Select
+                        disabled={isLoading}
                         onValueChange={field.onChange}
                         defaultValue={field.value}>
                         <SelectTrigger>

@@ -1,3 +1,5 @@
+import type { FC } from 'react';
+import type { AuctionType } from '@/models/auction.model';
 import { getUserAuctions } from '@/services/auction.service';
 import {
   Card,
@@ -7,15 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
-import type { AuctionType } from '@/models/auction.model';
 import { DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
+import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 import Image from 'next/image';
 import Link from 'next/link';
-import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
-import type { FC } from 'react';
+import WatchBidsModal from '@/components/modals/watch-bids-modal';
 
 const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
   const auctionsList = await getUserAuctions(userId);
@@ -29,7 +29,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
           const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
           const formattedStartTime =
             getFormattedDateTimeString(auctionStartTime);
-          const isActive = new Date() < new Date(auction.endTime);
+          const isActive = new Date() < auctionEndTime;
           return (
             <Card
               key={auction._id}
@@ -81,11 +81,12 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   alt={auction.itemName}
                 />
               </CardContent>
-              <CardFooter className='p-4 flex justify-between relative bottom-0'>
+              <CardFooter className='p-4 flex justify-between items-center relative bottom-0'>
                 <Link
                   href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                   <Button variant='secondary'>Edit</Button>
                 </Link>
+                <WatchBidsModal auctionBids={auction.bids} />
                 <DeleteAuctionAlert
                   userId={userId}
                   auctionId={auction._id.toString()}

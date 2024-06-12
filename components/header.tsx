@@ -11,7 +11,7 @@ const Header = async () => {
     <header className='flex items-center justify-between md:px-5 px-2 py-3 shadow-md hover:shadow-lg transition-shadow duration-200 mb-6'>
       <section className='flex items-center gap-2'>
         <Link href='/' title='Home Page'>
-          <span className='text-lg font-bold hover:opacity-90 transition-opacity duration-200'>
+          <span className='text-md md:text-lg font-bold hover:opacity-90 transition-opacity duration-200'>
             ToastTrade
           </span>
         </Link>
