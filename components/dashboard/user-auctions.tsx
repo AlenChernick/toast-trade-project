@@ -21,7 +21,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
   const auctionsList = await getUserAuctions(userId);
 
   return (
-    <section className='grid md:grid-cols-5 gap-4'>
+    <section className='grid place-items-center md:place-items-start md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
           const auctionEndTime = new Date(auction.endTime);
@@ -31,7 +31,9 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
             getFormattedDateTimeString(auctionStartTime);
           const isActive = new Date() < new Date(auction.endTime);
           return (
-            <Card key={auction._id} className='max-w-[320px]'>
+            <Card
+              key={auction._id}
+              className='w-full md:max-w-[320px] md:h-full'>
               <CardHeader className='p-4'>
                 <CardTitle className='leading-8 md:text-base text-xl'>
                   {auction.itemName}
@@ -79,7 +81,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   alt={auction.itemName}
                 />
               </CardContent>
-              <CardFooter className='p-4 flex justify-between'>
+              <CardFooter className='p-4 flex justify-between relative bottom-0'>
                 <Link
                   href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                   <Button variant='secondary'>Edit</Button>

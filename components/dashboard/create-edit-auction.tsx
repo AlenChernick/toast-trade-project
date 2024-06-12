@@ -282,7 +282,7 @@ const CreateOrEditAuction: FC<{
                 )}
               />
               <Button disabled={isLoading} type='submit'>
-                {`${isEdit ? 'Update' : 'Create'}`}
+                {isEdit ? 'Update' : 'Create'}
               </Button>
             </form>
           </Form>

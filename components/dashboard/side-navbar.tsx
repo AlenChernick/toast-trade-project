@@ -9,10 +9,10 @@ const SideNavbar: FC<{
   type: string | string[] | undefined;
 }> = ({ isEdit, type }) => {
   return (
-    <section className='md:w-44 w-72'>
+    <section className='flex w-full border-b-2 md:w-44 md:border-r-2 md:border-b-0 border-primary pb-2 mb-2 md:mr-5'>
       <nav>
         <ScrollArea>
-          <div className='flex flex-col gap-2'>
+          <div className='flex flex-row md:flex-col gap-5 md:gap-2'>
             <Link
               href={`?type=${DashboardActionType.CreateOrEditAuction}`}
               title={`${isEdit ? 'Edit' : 'Create'} auction`}

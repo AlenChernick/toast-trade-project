@@ -2,8 +2,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const SkeletonCardsLoader = () => {
   return (
-    <section className='grid md:grid-cols-5 gap-4'>
-      <div className='md:w-[320px] w-[250px] bg-card rounded-md'>
+    <section className='grid place-items-center md:place-items-start md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+      <div className='w-full md:w-[320px] bg-card rounded-md'>
         <div className='p-4'>
           <Skeleton className='md:text-base text-xl h-8 w-3/4 mb-2' />
           <Skeleton className='h-6 w-1/2 mb-2' />
@@ -21,7 +21,7 @@ const SkeletonCardsLoader = () => {
           <Skeleton className='w-1/4 h-10' />
         </div>
       </div>
-      <div className='md:w-[320px] w-[250px] bg-card rounded-md'>
+      <div className='w-full md:w-[320px] bg-card rounded-md'>
         <div className='p-4'>
           <Skeleton className='md:text-base text-xl h-8 w-3/4 mb-2' />
           <Skeleton className='h-6 w-1/2 mb-2' />
@@ -39,7 +39,7 @@ const SkeletonCardsLoader = () => {
           <Skeleton className='w-1/4 h-10' />
         </div>
       </div>
-      <div className='md:w-[320px] w-[250px] bg-card rounded-md'>
+      <div className='w-full md:w-[320px] bg-card rounded-md'>
         <div className='p-4'>
           <Skeleton className='md:text-base text-xl h-8 w-3/4 mb-2' />
           <Skeleton className='h-6 w-1/2 mb-2' />
@@ -57,7 +57,7 @@ const SkeletonCardsLoader = () => {
           <Skeleton className='w-1/4 h-10' />
         </div>
       </div>
-      <div className='md:w-[320px] w-[250px] bg-card rounded-md'>
+      <div className='w-full md:w-[320px] bg-card rounded-md'>
         <div className='p-4'>
           <Skeleton className='md:text-base text-xl h-8 w-3/4 mb-2' />
           <Skeleton className='h-6 w-1/2 mb-2' />

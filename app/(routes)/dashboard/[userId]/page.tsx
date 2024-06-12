@@ -29,7 +29,7 @@ const UserDashboard: NextPage<{
   const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
 
   return (
-    <section className='flex'>
+    <section className='flex flex-col md:flex-row'>
       <SideNavbar isEdit={isEdit} type={type} />
       {type === DashboardActionType.UserAuctions && (
         <Suspense key={type} fallback={<SkeletonCardsLoader />}>
