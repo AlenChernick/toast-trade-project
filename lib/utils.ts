@@ -17,3 +17,6 @@ export const getTimeVariables = (duration: number) => {
 export function getFormattedDateTimeString(date: Date) {
   return `${date.toDateString()} ${date.getHours()}:${date.getMinutes()}`;
 }
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

@@ -11,6 +11,9 @@ import { Card, CardContent } from '@/components/ui/card';
 const SkeletonCarouselLoader = () => {
   return (
     <section className='flex flex-col items-center md:justify-between md:px-24 px-8'>
+      <h1 className='md:text-3xl text-lg font-semibold text-center border-b-4 pb-2 border-primary'>
+        Welcome to ToastTrade: Where Every Sip Tells a Story!
+      </h1>
       <section className='w-full'>
         <h1 className='text-3xl ml-4 mb-3'>Latest auctions</h1>
         <section>

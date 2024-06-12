@@ -81,6 +81,7 @@ const SignUp: NextPage = () => {
         },
         body: JSON.stringify({
           ...values,
+          username: values.username.toLowerCase(),
           birthday: birthday,
         }),
       });

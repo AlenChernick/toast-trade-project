@@ -56,7 +56,10 @@ const SignIn: NextPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          username: values.username.toLowerCase(),
+        }),
       });
 
       if (!response.ok) {
