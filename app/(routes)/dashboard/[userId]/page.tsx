@@ -1,5 +1,6 @@
-import type { AuctionType } from '@/models/auction.model';
 import type { NextPage } from 'next';
+import type { JwtUser } from '@/models/user.model';
+import type { AuctionType } from '@/models/auction.model';
 import { DashboardActionType } from '@/enum';
 import { getLoggedInUser } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
@@ -9,6 +10,7 @@ import UserAuctions from '@/components/dashboard/user-auctions';
 import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
 import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
 import SideNavbar from '@/components/dashboard/side-navbar';
+import UserSettings from '@/components/dashboard/user-settings';
 
 const UserDashboard: NextPage<{
   params: { userId: string };
@@ -16,7 +18,7 @@ const UserDashboard: NextPage<{
 }> = async ({ params, searchParams }) => {
   const { userId } = params;
   const { type, auctionId } = searchParams;
-  const loggedInUser = await getLoggedInUser();
+  const loggedInUser = (await getLoggedInUser()) as JwtUser;
   const isEdit = auctionId !== undefined;
   let auction: AuctionType | undefined;
 
@@ -26,6 +28,7 @@ const UserDashboard: NextPage<{
     auction = await getUserAuction(userId, auctionId);
     if (!auction) return notFound();
   }
+
   const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
 
   return (
@@ -42,6 +45,9 @@ const UserDashboard: NextPage<{
           sellerName={sellerName}
           auction={auction}
         />
+      )}
+      {type === DashboardActionType.UserSettings && (
+        <UserSettings loggedInUser={loggedInUser} />
       )}
     </section>
   );

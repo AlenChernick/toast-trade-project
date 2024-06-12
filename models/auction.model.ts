@@ -78,4 +78,4 @@ const AuctionSchema = new Schema<AuctionType>(
 );
 
 export const Auction =
-  models.Auction || model<AuctionType>('Auction', AuctionSchema);
+  models?.Auction || model<AuctionType>('Auction', AuctionSchema);

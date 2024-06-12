@@ -1,6 +1,8 @@
 import 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import { User } from '@/models/user.model';
+import connectDB from '@/services/db.service';
 
 const secretKey: string = process.env.JWT_SECRET_KEY as string;
 const encodedKey = new TextEncoder().encode(secretKey);

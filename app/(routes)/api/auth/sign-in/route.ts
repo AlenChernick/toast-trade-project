@@ -3,6 +3,7 @@ import { User, type UserType, type JwtUser } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
 import { createSession, signOut } from '@/services/auth.service';
+import { use } from 'react';
 
 export async function POST(req: Request) {
   try {
@@ -27,8 +28,10 @@ export async function POST(req: Request) {
 
     const user: JwtUser = {
       _id: existingUser._id,
+      username: existingUser.username,
       firstName: existingUser.firstName,
       lastName: existingUser.lastName,
+      email: existingUser.email,
       createdAt: existingUser.createdAt,
       updatedAt: existingUser.updatedAt,
     };

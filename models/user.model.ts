@@ -14,8 +14,10 @@ export type UserType = {
 
 export type JwtUser = {
   _id: string;
+  username: string;
   firstName: string;
   lastName: string;
+  email: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -58,4 +60,4 @@ const UserSchema = new Schema<UserType>(
   { timestamps: true }
 );
 
-export const User = models.User || model<UserType>('User', UserSchema);
+export const User = models?.User || model<UserType>('User', UserSchema);

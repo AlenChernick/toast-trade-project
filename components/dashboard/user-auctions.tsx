@@ -46,10 +46,10 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                     Alcohol type: {auction.type}
                   </span>
                   <span className='border-b-2 pb-1'>
-                    Starting bid: {auction.startingBid}
+                    Starting bid: {auction.startingBid}$
                   </span>
                   <span className='border-b-2 pb-1'>
-                    Current bid: {auction.currentBid}
+                    Current bid: {auction.currentBid}$
                   </span>
                   <time
                     className='border-b-2 pb-1'

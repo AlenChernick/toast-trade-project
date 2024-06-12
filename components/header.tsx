@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { getLoggedInUser } from '@/services/auth.service';
+import { Beer } from 'lucide-react';
 import SignOutButton from './sign-out-button';
 
 const Header = async () => {
@@ -10,10 +11,12 @@ const Header = async () => {
   return (
     <header className='flex items-center justify-between md:px-5 px-2 py-3 shadow-md hover:shadow-lg transition-shadow duration-200 mb-6'>
       <section className='flex items-center gap-2'>
-        <Link href='/' title='Home Page'>
-          <span className='text-md md:text-lg font-bold hover:opacity-90 transition-opacity duration-200'>
-            ToastTrade
-          </span>
+        <Link
+          href='/'
+          title='Home Page'
+          className='flex gap-1 justify-between items-center hover:opacity-90 transition-opacity duration-200'>
+          <Beer className='w-4 h-4' />
+          <span className='text-md md:text-lg font-bold'>ToastTrade</span>
         </Link>
         <ThemeToggle />
       </section>
