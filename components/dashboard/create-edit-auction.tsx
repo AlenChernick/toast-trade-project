@@ -43,7 +43,7 @@ const CreateOrEditAuction = ({
     itemName: z
       .string()
       .min(5, 'Item name must be at least 5 characters long.')
-      .max(50, 'Item name must be at most 50 characters long.')
+      .max(80, 'Item name must be at most 50 characters long.')
       .nonempty('Item name cannot be empty'),
     itemImage: isEdit
       ? z.any()

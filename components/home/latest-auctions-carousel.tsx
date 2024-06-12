@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/card';
 import Image from 'next/image';
 import { useLayoutEffect, useState } from 'react';
-import { getFormattedDateTimeString } from '@/lib/utils';
+import { getFormattedDateTimeString, getTimeVariables } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -62,9 +62,10 @@ const LatestAuctionsCarousel = ({
             let seconds = 0;
 
             if (displayCountdown) {
-              hours = Math.floor(duration / (1000 * 60 * 60));
-              minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-              seconds = Math.floor((duration % (1000 * 60)) / 1000);
+              const timeVariables = getTimeVariables(duration);
+              hours = timeVariables.hours;
+              minutes = timeVariables.minutes;
+              seconds = timeVariables.seconds;
             }
 
             return (

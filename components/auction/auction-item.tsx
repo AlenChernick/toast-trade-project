@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardTitle,
 } from '@/components/ui/card';
-import { getFormattedDateTimeString } from '@/lib/utils';
+import { getFormattedDateTimeString, getTimeVariables } from '@/lib/utils';
 import type { AuctionType } from '@/models/auction.model';
 import type { JWTPayload } from 'jose';
 import Image from 'next/image';
@@ -43,9 +43,7 @@ const AuctionItem = ({
   const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
   const formattedStartTime = getFormattedDateTimeString(auctionCreatedTime);
 
-  const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+  const { hours, minutes, seconds } = getTimeVariables(timeRemaining);
 
   return (
     <section className='w-full'>
