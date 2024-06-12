@@ -1,6 +1,5 @@
 import 'server-only';
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
 import { Readable } from 'stream';
 
 const cloudName = process.env.CLOUDINARY_NAME;

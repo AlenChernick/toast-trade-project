@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { User, type UserType, type JwtUser } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
-import { createSession, encrypt, signOut } from '@/services/auth.service';
+import { createSession, signOut } from '@/services/auth.service';
 
 export async function POST(req: Request) {
   try {

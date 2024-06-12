@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/services/db.service';
-import { getLoggedInUser, signOut } from '@/services/auth.service';
+import { getLoggedInUser } from '@/services/auth.service';
 import { Auction } from '@/models/auction.model';
 import { uploadToCloudinary } from '@/services/cloudinary.service';
 
