@@ -124,7 +124,7 @@ const SignUp: NextPage = () => {
               className='flex flex-col justify-center max-w-80 m-auto gap-5'>
               <FormField
                 control={form.control}
-                name='firstName'
+                name='username'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>
