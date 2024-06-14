@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
-import { getLatestAuctions } from '@/services/auction.service';
+import { auctionService } from '@/services/auction.service';
 import { AuctionType } from '@/models/auction.model';
 import LatestAuctionsCarousel from '@/components/home/latest-auctions-carousel';
 
 const Home: NextPage = async () => {
-  const latestAuctions: AuctionType[] | undefined = await getLatestAuctions();
+  const latestAuctions: AuctionType[] | undefined =
+    await auctionService.getLatestAuctions();
 
   return (
     <section className='flex flex-col gap-5 items-center md:justify-between md:px-24 px-0'>

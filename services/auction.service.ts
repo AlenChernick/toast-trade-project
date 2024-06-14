@@ -3,7 +3,7 @@ import { getLoggedInUser } from '@/services/auth.service';
 import { Auction, type AuctionType } from '@/models/auction.model';
 import connectDB from '@/services/db.service';
 
-export async function getUserAuctions(userId: string) {
+const getUserAuctions = async (userId: string) => {
   try {
     const loggedInUser = await getLoggedInUser();
 
@@ -24,12 +24,12 @@ export async function getUserAuctions(userId: string) {
   } catch (error) {
     console.error((error as Error).message);
   }
-}
+};
 
-export async function getUserAuction(
+const getUserAuction = async (
   userId: string,
   auctionId: string | string[] | undefined
-) {
+) => {
   try {
     const loggedInUser = await getLoggedInUser();
 
@@ -53,9 +53,9 @@ export async function getUserAuction(
   } catch (error) {
     console.error((error as Error).message);
   }
-}
+};
 
-export async function getAuction(auctionId: string) {
+const getAuction = async (auctionId: string) => {
   try {
     await connectDB();
 
@@ -72,9 +72,9 @@ export async function getAuction(auctionId: string) {
   } catch (error) {
     console.error((error as Error).message);
   }
-}
+};
 
-export async function getLatestAuctions() {
+const getLatestAuctions = async () => {
   try {
     await connectDB();
 
@@ -96,4 +96,11 @@ export async function getLatestAuctions() {
   } catch (error) {
     console.error((error as Error).message);
   }
-}
+};
+
+export const auctionService = {
+  getUserAuctions,
+  getUserAuction,
+  getAuction,
+  getLatestAuctions,
+};

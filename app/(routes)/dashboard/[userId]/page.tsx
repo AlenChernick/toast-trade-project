@@ -4,8 +4,8 @@ import type { AuctionType } from '@/models/auction.model';
 import { DashboardActionType } from '@/enum';
 import { getLoggedInUser } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
-import { getUserAuction } from '@/services/auction.service';
 import { Suspense } from 'react';
+import { auctionService } from '@/services/auction.service';
 import UserAuctions from '@/components/dashboard/user-auctions';
 import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
 import SideNavbar from '@/components/dashboard/side-navbar';
@@ -26,7 +26,7 @@ const UserDashboard: NextPage<{
   if (userId !== loggedInUser?._id) return notFound();
 
   if (isEdit) {
-    auction = await getUserAuction(userId, auctionId);
+    auction = await auctionService.getUserAuction(userId, auctionId);
     if (!auction) return notFound();
   }
 

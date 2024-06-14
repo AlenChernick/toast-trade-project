@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { AuctionType } from '@/models/auction.model';
-import { getUserAuctions } from '@/services/auction.service';
+import { auctionService } from '@/services/auction.service';
 import {
   Card,
   CardContent,
@@ -18,7 +18,7 @@ import Link from 'next/link';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
 
 const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
-  const auctionsList = await getUserAuctions(userId);
+  const auctionsList = await auctionService.getUserAuctions(userId);
 
   return (
     <section className='grid place-items-center md:place-items-start md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
