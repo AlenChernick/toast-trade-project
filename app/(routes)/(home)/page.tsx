@@ -7,7 +7,7 @@ const Home: NextPage = async () => {
   const latestAuctions: AuctionType[] | undefined = await getLatestAuctions();
 
   return (
-    <section className='flex flex-col gap-5 items-center md:justify-between md:px-24 px-12'>
+    <section className='flex flex-col gap-5 items-center md:justify-between md:px-24 px-0'>
       <h1 className='md:text-3xl text-lg font-semibold text-center border-b-4 pb-2 border-primary'>
         Welcome to ToastTrade: Where Every Sip Tells a Story!
       </h1>

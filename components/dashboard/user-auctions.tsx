@@ -21,7 +21,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
   const auctionsList = await getUserAuctions(userId);
 
   return (
-    <section className='grid place-items-center md:place-items-start md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+    <section className='grid place-items-center md:place-items-start md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
       {auctionsList?.length ? (
         auctionsList.map((auction: AuctionType) => {
           const auctionEndTime = new Date(auction.endTime);
@@ -91,7 +91,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                 <WatchBidsModal auctionBids={auction.bids} />
                 <DeleteAuctionAlert
                   userId={userId}
-                  auctionId={auction._id.toString()}
+                  auctionId={auction._id}
                   auctionHasBids={auctionHasBids}
                 />
               </CardFooter>

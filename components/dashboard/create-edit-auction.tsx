@@ -160,8 +160,8 @@ const CreateOrEditAuction: FC<{
   };
 
   return (
-    <section className='max-w-sm m-auto md:m-0'>
-      <Card>
+    <section>
+      <Card className='rounded-lg border bg-card text-card-foreground shadow-sm lg:max-w-96 w-full md:max-w-80 m-auto'>
         <CardHeader>
           <CardTitle>{`${isEdit ? 'Edit' : 'Create'}`} Auction</CardTitle>
         </CardHeader>

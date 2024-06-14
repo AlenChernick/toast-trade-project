@@ -67,7 +67,7 @@ const LatestAuctionsCarousel: FC<{
             }
 
             return (
-              <CarouselItem key={auction._id}>
+              <CarouselItem key={auction._id} className='pl-0'>
                 <Card className='py-7'>
                   <CardContent className='flex lg:flex-row flex-col gap-5'>
                     <Image
@@ -164,8 +164,8 @@ const LatestAuctionsCarousel: FC<{
             );
           })}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className='hidden md:flex' />
+        <CarouselNext className='hidden md:flex' />
       </Carousel>
     </section>
   );

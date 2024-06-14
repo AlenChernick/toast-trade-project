@@ -10,12 +10,12 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const SkeletonCarouselLoader = () => {
   return (
-    <section className='flex flex-col items-center md:justify-between md:px-24 px-8'>
-      <h1 className='md:text-3xl text-lg font-semibold text-center border-b-4 pb-2 border-primary'>
+    <section className='flex flex-col items-center md:justify-between md:px-24 px-0'>
+      <h1 className='md:text-3xl text-lg font-semibold text-center border-b-4 pb-2 border-primary mb-5'>
         Welcome to ToastTrade: Where Every Sip Tells a Story!
       </h1>
       <section className='w-full'>
-        <h1 className='text-3xl ml-4 mb-3'>Latest auctions</h1>
+        <h2 className='md:text-2xl text-lg ml-4 mb-3'>Latest auctions</h2>
         <section>
           <div
             className='relative'
@@ -32,7 +32,7 @@ const SkeletonCarouselLoader = () => {
                   <Carousel>
                     <CarouselContent className='-ml-0'>
                       {[1, 2].map((_, index) => (
-                        <CarouselItem key={index}>
+                        <CarouselItem key={index} className='pl-0'>
                           <Card className='py-7'>
                             <CardContent className='p-6 pt-0 flex md:flex-row flex-col gap-5'>
                               <Skeleton className='md:h-[570px] md:w-[470px] w-full min-h-[273px] md:mb-0 mb-4 ' />
@@ -58,8 +58,8 @@ const SkeletonCarouselLoader = () => {
                         </CarouselItem>
                       ))}
                     </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
+                    <CarouselPrevious className='hidden md:flex' />
+                    <CarouselNext className='hidden md:flex' />
                   </Carousel>
                 </div>
               </div>

@@ -111,7 +111,7 @@ const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className='flex flex-col justify-center max-w-80 m-auto gap-5'>
+              className='flex flex-col justify-center md:max-w-80 m-auto gap-5'>
               <FormField
                 control={form.control}
                 name='firstName'

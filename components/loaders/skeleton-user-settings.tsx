@@ -20,7 +20,7 @@ const SkeletonUserSettings = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-col justify-center w-80 max-w-96 m-auto gap-5'>
+          <div className='flex flex-col justify-center md:w-80 max-w-96 m-auto gap-5'>
             <div>
               <Skeleton className='h-5 w-20 mb-2' />
               <Skeleton className='h-10' />
