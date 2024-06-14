@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/services/db.service';
 import { authService } from '@/services/auth.service';
 import { Auction } from '@/models/auction.model';
-import { uploadToCloudinary } from '@/services/cloudinary.service';
+import { cloudinaryService } from '@/services/cloudinary.service';
 
 export async function POST(req: Request) {
   try {
@@ -28,7 +28,9 @@ export async function POST(req: Request) {
     if (itemImage && typeof itemImage === 'object') {
       const buffer = await itemImage.arrayBuffer();
 
-      const cloudinarySecuredURL = await uploadToCloudinary(buffer);
+      const cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(
+        buffer
+      );
 
       const newAuction = new Auction({
         userId,
@@ -75,7 +77,7 @@ export async function PATCH(req: Request) {
 
     if (itemImage && typeof itemImage === 'object') {
       const buffer = await itemImage.arrayBuffer();
-      cloudinarySecuredURL = await uploadToCloudinary(buffer);
+      cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(buffer);
     } else {
       console.log('No image provided for auction creation.');
     }

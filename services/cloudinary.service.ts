@@ -12,7 +12,7 @@ cloudinary.config({
   api_secret: apiSecret,
 });
 
-export const uploadToCloudinary = async (buffer: ArrayBuffer) => {
+const uploadToCloudinary = async (buffer: ArrayBuffer) => {
   try {
     const bufferData = Buffer.from(buffer);
     const bufferStream = new Readable();
@@ -44,4 +44,8 @@ export const uploadToCloudinary = async (buffer: ArrayBuffer) => {
     console.error('Error uploading image to Cloudinary:', error);
     throw new Error('Error uploading image to Cloudinary');
   }
+};
+
+export const cloudinaryService = {
+  uploadToCloudinary,
 };
