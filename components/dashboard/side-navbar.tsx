@@ -32,7 +32,7 @@ const SideNavbar: FC<{
                   : 'dark:text-white text-black'
               } flex gap-2 items-center`}>
               <Columns3 className='w-4 h-4' />
-              Your auctions
+              User auctions
             </Link>
             <Link
               href={`?type=${DashboardActionType.UserSettings}`}

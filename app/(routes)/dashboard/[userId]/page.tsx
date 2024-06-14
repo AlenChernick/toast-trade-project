@@ -8,9 +8,10 @@ import { getUserAuction } from '@/services/auction.service';
 import { Suspense } from 'react';
 import UserAuctions from '@/components/dashboard/user-auctions';
 import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
-import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
 import SideNavbar from '@/components/dashboard/side-navbar';
 import UserSettings from '@/components/dashboard/user-settings';
+import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
+import SkeletonUserSettings from '@/components/loaders/skeleton-user-settings';
 
 const UserDashboard: NextPage<{
   params: { userId: string };
@@ -34,11 +35,6 @@ const UserDashboard: NextPage<{
   return (
     <section className='flex flex-col md:flex-row'>
       <SideNavbar isEdit={isEdit} type={type} />
-      {type === DashboardActionType.UserAuctions && (
-        <Suspense key={type} fallback={<SkeletonCardsLoader />}>
-          <UserAuctions userId={userId} />
-        </Suspense>
-      )}
       {type === DashboardActionType.CreateOrEditAuction && (
         <CreateOrEditAuction
           userId={userId}
@@ -46,8 +42,19 @@ const UserDashboard: NextPage<{
           auction={auction}
         />
       )}
+      {type === DashboardActionType.UserAuctions && (
+        <Suspense
+          key={DashboardActionType.UserAuctions}
+          fallback={<SkeletonCardsLoader />}>
+          <UserAuctions userId={userId} />
+        </Suspense>
+      )}
       {type === DashboardActionType.UserSettings && (
-        <UserSettings loggedInUser={loggedInUser} />
+        <Suspense
+          key={DashboardActionType.UserSettings}
+          fallback={<SkeletonUserSettings />}>
+          <UserSettings loggedInUser={loggedInUser} />
+        </Suspense>
       )}
     </section>
   );
