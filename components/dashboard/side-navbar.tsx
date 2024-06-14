@@ -1,8 +1,13 @@
 import type { FC } from 'react';
 import { DashboardActionType } from '@/enum';
-import { CirclePlus, Columns3, UserRoundCog } from 'lucide-react';
+import {
+  CirclePlus,
+  Columns3,
+  UserRoundCog,
+  SquareActivity,
+} from 'lucide-react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import Link from 'next/link';
-import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
 const SideNavbar: FC<{
   isEdit: boolean;
@@ -26,6 +31,7 @@ const SideNavbar: FC<{
             </Link>
             <Link
               href={`?type=${DashboardActionType.UserAuctions}`}
+              title={`User auctions`}
               className={`${
                 type === DashboardActionType.UserAuctions
                   ? 'text-active'
@@ -35,7 +41,19 @@ const SideNavbar: FC<{
               User auctions
             </Link>
             <Link
+              href={`?type=${DashboardActionType.UserBids}`}
+              title={`User bids`}
+              className={`${
+                type === DashboardActionType.UserBids
+                  ? 'text-active'
+                  : 'dark:text-white text-black'
+              } flex gap-2 items-center`}>
+              <SquareActivity className='w-4 h-4' />
+              User bids
+            </Link>
+            <Link
               href={`?type=${DashboardActionType.UserSettings}`}
+              title={`User settings`}
               className={`${
                 type === DashboardActionType.UserSettings
                   ? 'text-active'

@@ -98,9 +98,33 @@ const getLatestAuctions = async () => {
   }
 };
 
+const getUserBidsAuctions = async (userId: string) => {
+  try {
+    await connectDB();
+
+    const userBidsAuctions: AuctionType[] = await Auction.find({
+      bids: { $elemMatch: { userId: userId } },
+    }).lean();
+
+    if (userBidsAuctions) {
+      const parsedUserBidsAuctions = JSON.parse(
+        JSON.stringify(userBidsAuctions)
+      );
+      return parsedUserBidsAuctions;
+    } else {
+      throw new Error('Failed to get user bids auctions');
+    }
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+};
+
+getUserBidsAuctions('662bf98a068d66ec0cfeb132');
+
 export const auctionService = {
   getUserAuctions,
   getUserAuction,
   getAuction,
   getLatestAuctions,
+  getUserBidsAuctions,
 };

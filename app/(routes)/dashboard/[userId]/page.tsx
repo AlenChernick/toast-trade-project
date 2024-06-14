@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { auctionService } from '@/services/auction.service';
 import UserAuctions from '@/components/dashboard/user-auctions';
+import UserBids from '@/components/dashboard/user-bids';
 import CreateOrEditAuction from '@/components/dashboard/create-edit-auction';
 import SideNavbar from '@/components/dashboard/side-navbar';
 import UserSettings from '@/components/dashboard/user-settings';
@@ -47,6 +48,13 @@ const UserDashboard: NextPage<{
           key={DashboardActionType.UserAuctions}
           fallback={<SkeletonCardsLoader />}>
           <UserAuctions userId={userId} />
+        </Suspense>
+      )}
+      {type === DashboardActionType.UserBids && (
+        <Suspense
+          key={DashboardActionType.UserBids}
+          fallback={<SkeletonCardsLoader />}>
+          <UserBids userId={userId} />
         </Suspense>
       )}
       {type === DashboardActionType.UserSettings && (

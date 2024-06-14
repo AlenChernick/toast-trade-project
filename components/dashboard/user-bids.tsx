@@ -9,30 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { DashboardActionType } from '@/enum';
-import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
-import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
+import WatchBidsModal from '@/components/modals/watch-bids-modal';
 import Image from 'next/image';
 import Link from 'next/link';
-import WatchBidsModal from '@/components/modals/watch-bids-modal';
 
-const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
-  const auctionsList: AuctionType[] = await auctionService.getUserAuctions(
-    userId
-  );
+const UserBids: FC<{ userId: string }> = async ({ userId }) => {
+  const userBidsAuctions: AuctionType[] =
+    await auctionService.getUserBidsAuctions(userId);
 
   return (
     <section className='grid place-items-center md:place-items-start md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-      {auctionsList?.length ? (
-        auctionsList.map((auction: AuctionType) => {
+      {userBidsAuctions?.length ? (
+        userBidsAuctions.map((auction: AuctionType) => {
           const auctionEndTime = new Date(auction.endTime);
           const auctionStartTime = new Date(auction.createdAt);
           const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
           const formattedStartTime =
             getFormattedDateTimeString(auctionStartTime);
           const isActive = new Date() < auctionEndTime;
-          const auctionHasBids = auction.bids?.length > 0;
+          const userBids = auction.bids.filter((bid) => bid.userId === userId);
 
           return (
             <Card
@@ -88,26 +84,16 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                 />
               </CardContent>
               <CardFooter className='p-4 flex justify-between items-center relative bottom-0'>
-                <Link
-                  title={`Edit ${auction.itemName} auction`}
-                  href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
-                  <Button variant='secondary'>Edit</Button>
-                </Link>
-                <WatchBidsModal auctionBids={auction.bids} />
-                <DeleteAuctionAlert
-                  userId={userId}
-                  auctionId={auction._id}
-                  auctionHasBids={auctionHasBids}
-                />
+                <WatchBidsModal auctionBids={userBids} />
               </CardFooter>
             </Card>
           );
         })
       ) : (
-        <div>No auctions created yet...</div>
+        <div>No bids yet...</div>
       )}
     </section>
   );
 };
 
-export default UserAuctions;
+export default UserBids;
