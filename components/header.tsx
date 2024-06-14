@@ -16,9 +16,11 @@ const Header = async () => {
           title='Home Page'
           className='flex gap-1 justify-between items-center hover:opacity-90 transition-opacity duration-200'>
           <Beer className='w-4 h-4' />
-          <span className='text-md md:text-lg font-bold'>ToastTrade</span>
+          <span className='text-sm md:text-lg font-bold'>ToastTrade</span>
         </Link>
-        <ThemeToggle />
+        <span className='fixed bottom-1 left-1 z-10 md:static md:z-0'>
+          <ThemeToggle />
+        </span>
       </section>
 
       {!loggedInUser ? (
