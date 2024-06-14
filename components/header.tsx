@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { Beer } from 'lucide-react';
 import SignOutButton from './sign-out-button';
 
 const Header = async () => {
-  const loggedInUser = await getLoggedInUser();
+  const loggedInUser = await authService.getLoggedInUser();
 
   return (
     <header className='flex items-center justify-between md:px-5 px-2 py-3 shadow-md hover:shadow-lg transition-shadow duration-200 mb-6'>

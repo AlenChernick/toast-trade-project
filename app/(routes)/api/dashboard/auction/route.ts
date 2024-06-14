@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/services/db.service';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { Auction } from '@/models/auction.model';
 import { uploadToCloudinary } from '@/services/cloudinary.service';
 
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const userId = formData.get('userId');
 
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -59,7 +59,7 @@ export async function PATCH(req: Request) {
     const formData = await req.formData();
     const userId = formData.get('userId');
 
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -108,7 +108,7 @@ export async function DELETE(req: Request) {
     const auctionHasBidsString = searchParams.get('auctionHasBids');
     const auctionHasBids = auctionHasBidsString === 'true';
 
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });

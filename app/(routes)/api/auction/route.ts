@@ -1,5 +1,5 @@
 import { Auction, type UserBid } from '@/models/auction.model';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { NextResponse } from 'next/server';
 import connectDB from '@/services/db.service';
 
@@ -20,7 +20,7 @@ export async function PATCH(req: Request) {
       return new NextResponse('Auction has ended', { status: 400 });
     }
 
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });

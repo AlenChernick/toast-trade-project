@@ -1,13 +1,13 @@
 import { User, type UserType } from '@/models/user.model';
 import { NextResponse } from 'next/server';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
 
 export async function PATCH(req: Request) {
   try {
     const { userId, firstName, lastName, email, password } = await req.json();
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });

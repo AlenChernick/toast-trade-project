@@ -18,7 +18,7 @@ const cookieOptions = {
   path: '/',
 };
 
-export const encrypt = async (payload: JWTPayload | undefined) => {
+const encrypt = async (payload: JWTPayload | undefined) => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -26,13 +26,13 @@ export const encrypt = async (payload: JWTPayload | undefined) => {
     .sign(encodedKey);
 };
 
-export const createSession = async (user: JWTPayload | undefined) => {
+const createSession = async (user: JWTPayload | undefined) => {
   const session = await encrypt({ ...user, expiresAt });
 
   cookies().set(cookieSessionKey, session, cookieOptions);
 };
 
-export const updateSession = async () => {
+const updateSession = async () => {
   const session = cookies().get(cookieSessionKey)?.value;
   const payload = await decrypt(session);
 
@@ -43,13 +43,13 @@ export const updateSession = async () => {
   cookies().set(cookieSessionKey, session, cookieOptions);
 };
 
-export const getLoggedInUser = async () => {
+const getLoggedInUser = async () => {
   const cookie = cookies().get(cookieSessionKey)?.value;
   const loggedInUser = await decrypt(cookie);
   return loggedInUser;
 };
 
-export const decrypt = async (session: string | undefined = '') => {
+const decrypt = async (session: string | undefined = '') => {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ['HS256'],
@@ -60,6 +60,13 @@ export const decrypt = async (session: string | undefined = '') => {
   }
 };
 
-export const signOut = async () => {
+const signOut = async () => {
   cookies().delete(cookieSessionKey);
+};
+
+export const authService = {
+  createSession,
+  updateSession,
+  getLoggedInUser,
+  signOut,
 };

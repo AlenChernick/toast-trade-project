@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import type { JwtUser } from '@/models/user.model';
 import type { AuctionType } from '@/models/auction.model';
 import { DashboardActionType } from '@/enum';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { auctionService } from '@/services/auction.service';
@@ -19,7 +19,7 @@ const UserDashboard: NextPage<{
 }> = async ({ params, searchParams }) => {
   const { userId } = params;
   const { type, auctionId } = searchParams;
-  const loggedInUser = (await getLoggedInUser()) as JwtUser;
+  const loggedInUser = (await authService.getLoggedInUser()) as JwtUser;
   const isEdit = auctionId !== undefined;
   let auction: AuctionType | undefined;
 

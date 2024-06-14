@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 
 const allowedOrigins = ['http://localhost:3000', 'http://10.0.0.1:3000'];
 
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
   const isAuthPages =
     path.startsWith('/sign-in') || path.startsWith('/sign-up');
 
-  const loggedInUser = await getLoggedInUser();
+  const loggedInUser = await authService.getLoggedInUser();
   const userId = loggedInUser?._id;
 
   if (isProtectedRoute && !userId) {

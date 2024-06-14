@@ -1,11 +1,11 @@
 import 'server-only';
-import { getLoggedInUser } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { Auction, type AuctionType } from '@/models/auction.model';
 import connectDB from '@/services/db.service';
 
 const getUserAuctions = async (userId: string) => {
   try {
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id !== userId) {
       throw new Error('Unauthorized');
@@ -31,7 +31,7 @@ const getUserAuction = async (
   auctionId: string | string[] | undefined
 ) => {
   try {
-    const loggedInUser = await getLoggedInUser();
+    const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id !== userId) {
       throw new Error('Unauthorized');

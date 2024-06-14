@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { User, type UserType, type JwtUser } from '@/models/user.model';
 import bcrypt from 'bcrypt';
 import connectDB from '@/services/db.service';
-import { createSession, signOut } from '@/services/auth.service';
-import { use } from 'react';
+import { authService } from '@/services/auth.service';
 
 export async function POST(req: Request) {
   try {
@@ -36,7 +35,7 @@ export async function POST(req: Request) {
       updatedAt: existingUser.updatedAt,
     };
 
-    await createSession({
+    await authService.createSession({
       ...user,
     });
 
@@ -49,7 +48,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    await signOut();
+    await authService.signOut();
     return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.log('[DELETE:SIGN-IN]', error);
