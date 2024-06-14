@@ -30,6 +30,8 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
           const formattedStartTime =
             getFormattedDateTimeString(auctionStartTime);
           const isActive = new Date() < auctionEndTime;
+          const auctionHasBids = auction.bids?.length > 0;
+
           return (
             <Card
               key={auction._id}
@@ -90,6 +92,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                 <DeleteAuctionAlert
                   userId={userId}
                   auctionId={auction._id.toString()}
+                  auctionHasBids={auctionHasBids}
                 />
               </CardFooter>
             </Card>

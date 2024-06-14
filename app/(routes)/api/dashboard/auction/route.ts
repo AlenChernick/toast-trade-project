@@ -105,11 +105,20 @@ export async function DELETE(req: Request) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
     const auctionId = searchParams.get('auctionId');
+    const auctionHasBidsString = searchParams.get('auctionHasBids');
+    const auctionHasBids = auctionHasBidsString === 'true';
 
     const loggedInUser = await getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
+    }
+
+    if (auctionHasBids) {
+      return new NextResponse(
+        'Cannot delete auction as it has existing bids.',
+        { status: 400 }
+      );
     }
 
     await connectDB();

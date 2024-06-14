@@ -17,15 +17,22 @@ import { toast } from 'sonner';
 const DeleteAuctionAlert: FC<{
   userId: string;
   auctionId: string;
-}> = ({ userId, auctionId }) => {
+  auctionHasBids: boolean;
+}> = ({ userId, auctionId, auctionHasBids }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleDeleteAuction = async () => {
     try {
       setIsLoading(true);
+
+      if (auctionHasBids) {
+        toast.error('Cannot delete an auction with bids.');
+        return;
+      }
+
       const response = await fetch(
-        `/api/dashboard/auction?userId=${userId}&auctionId=${auctionId}`,
+        `/api/dashboard/auction?userId=${userId}&auctionId=${auctionId}&auctionHasBids=${auctionHasBids}`,
         {
           method: 'DELETE',
         }
