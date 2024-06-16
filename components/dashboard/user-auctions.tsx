@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { DashboardActionType } from '@/enum';
+import { AuctionStatus, DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
@@ -31,7 +31,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
           const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
           const formattedStartTime =
             getFormattedDateTimeString(auctionStartTime);
-          const isActive = new Date() < auctionEndTime;
+          const isAuctionActive = new Date() < auctionEndTime;
           const auctionHasBids = auction.bids?.length > 0;
 
           return (
@@ -69,10 +69,15 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   </time>
                   <span className='border-b-2 pb-1'>
                     Status:{' '}
-                    {isActive ? (
-                      <em className='not-italic text-green-400'>Active</em>
+                    {isAuctionActive ? (
+                      <em className='not-italic text-green-400'>
+                        {AuctionStatus.Active}
+                      </em>
                     ) : (
-                      <em className='not-italic text-primary'>Ended</em>
+                      <em className='not-italic text-primary'>
+                        {' '}
+                        {AuctionStatus.Ended}
+                      </em>
                     )}
                   </span>
                 </CardDescription>

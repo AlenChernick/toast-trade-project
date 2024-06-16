@@ -4,3 +4,10 @@ export enum DashboardActionType {
   UserBids = 'userBids',
   UserSettings = 'userSettings',
 }
+
+export enum AuctionStatus {
+  Active = 'Active',
+  Ended = 'Ended',
+  AwaitingPayment = 'Awaiting Payment',
+  Completed = 'Completed',
+}

@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import type { AuctionType } from '@/models/auction.model';
+import { AuctionStatus } from '@/enum';
 import { auctionService } from '@/services/auction.service';
 import {
   Card,
@@ -11,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { getFormattedDateTimeString } from '@/lib/utils';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
+import Checkout from '@/components/dashboard/checkout';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -27,8 +29,11 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
           const formattedEndTime = getFormattedDateTimeString(auctionEndTime);
           const formattedStartTime =
             getFormattedDateTimeString(auctionStartTime);
-          const isActive = new Date() < auctionEndTime;
+          const isAuctionActive = new Date() < auctionEndTime;
           const userBids = auction.bids.filter((bid) => bid.userId === userId);
+          const isUserBidIsHighest = auction.bids.some(
+            (bid) => bid.userId === userId && bid.bid === auction.currentBid
+          );
 
           return (
             <Card
@@ -65,10 +70,15 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
                   </time>
                   <span className='border-b-2 pb-1'>
                     Status:{' '}
-                    {isActive ? (
-                      <em className='not-italic text-green-400'>Active</em>
+                    {isAuctionActive ? (
+                      <em className='not-italic text-green-400'>
+                        {AuctionStatus.Active}
+                      </em>
                     ) : (
-                      <em className='not-italic text-primary'>Ended</em>
+                      <em className='not-italic text-primary'>
+                        {' '}
+                        {AuctionStatus.Ended}
+                      </em>
                     )}
                   </span>
                 </CardDescription>
@@ -82,9 +92,17 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
                   src={auction.itemImage}
                   alt={auction.itemName}
                 />
+                {!isAuctionActive && isUserBidIsHighest && (
+                  <p className='text-center text-primary relative top-3'>
+                    You are the highest bidder!
+                  </p>
+                )}
               </CardContent>
               <CardFooter className='p-4 flex justify-between items-center relative bottom-0'>
                 <WatchBidsModal auctionBids={userBids} />
+                {!isAuctionActive && isUserBidIsHighest && (
+                  <Checkout auction={auction} userId={userId} />
+                )}
               </CardFooter>
             </Card>
           );

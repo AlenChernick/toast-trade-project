@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authService } from '@/services/auth.service';
 
-const allowedOrigins = ['http://localhost:3000', 'http://10.0.0.1:3000'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://10.0.0.1:3000',
+  'https://checkout.stripe.com',
+  'https://hooks.stripe.com',
+];
 
 const corsOptions = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -12,14 +17,17 @@ const protectedRoutes = ['/dashboard'];
 const publicRoutes = ['/sign-in', '/sign-up', '/'];
 
 export async function middleware(request: NextRequest) {
+  const isDev = process.env.NODE_ENV === 'development';
   const path = request.nextUrl.pathname;
+  const method = request.method;
+  const origin = isDev
+    ? 'http://localhost:3000'
+    : request.headers.get('origin') ?? '';
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     path.startsWith(route)
   );
-
   const isPublicRoute = publicRoutes.includes(path);
-
   const isAuthPages =
     path.startsWith('/sign-in') || path.startsWith('/sign-up');
 
@@ -39,10 +47,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (path.startsWith('/api')) {
-    const origin = request.headers.get('origin') ?? '';
     const isAllowedOrigin = allowedOrigins.includes(origin);
 
-    const isPreflight = request.method === 'OPTIONS';
+    const isPreflight = method === 'OPTIONS';
 
     if (isPreflight) {
       const preflightHeaders = {
