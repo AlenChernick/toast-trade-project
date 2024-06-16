@@ -46,6 +46,36 @@ const uploadToCloudinary = async (buffer: ArrayBuffer) => {
   }
 };
 
+const deleteFromCloudinary = async (cloudinaryImageUrl: string) => {
+  try {
+    const publicIdMatch = cloudinaryImageUrl.match(
+      /\/([^/]+?)\.(jpg|jpeg|png|gif|svg|webp|)$/i
+    );
+
+    if (!publicIdMatch || !publicIdMatch[1]) {
+      throw new Error('Invalid Cloudinary URL');
+    }
+
+    const publicId = publicIdMatch[1];
+
+    const deletionResult = await cloudinary.uploader.destroy(
+      `toast-trade/${publicId}`
+    );
+
+    if (deletionResult.result === 'ok') {
+      console.log(`Successfully deleted image with public ID ${publicId}`);
+      return true;
+    } else {
+      console.error('Error deleting image from Cloudinary:', deletionResult);
+      throw new Error('Error deleting image from Cloudinary');
+    }
+  } catch (error) {
+    console.error('Error deleting image from Cloudinary:', error);
+    throw new Error('Error deleting image from Cloudinary');
+  }
+};
+
 export const cloudinaryService = {
   uploadToCloudinary,
+  deleteFromCloudinary,
 };

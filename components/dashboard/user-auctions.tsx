@@ -33,6 +33,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
             getFormattedDateTimeString(auctionStartTime);
           const isAuctionActive = new Date() < auctionEndTime;
           const auctionHasBids = auction.bids?.length > 0;
+          const auctionImageUrl = auction.itemImage;
 
           return (
             <Card
@@ -103,6 +104,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   userId={userId}
                   auctionId={auction._id}
                   auctionHasBids={auctionHasBids}
+                  auctionImageUrl={auctionImageUrl}
                 />
               </CardFooter>
             </Card>

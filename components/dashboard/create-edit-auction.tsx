@@ -119,6 +119,9 @@ const CreateOrEditAuction: FC<{
       const formData = new FormData();
       formData.append('itemName', values.itemName);
       formData.append('itemImage', values.itemImage[0]);
+      if (isEdit && values.itemImage !== auction?.itemImage) {
+        formData.append('auctionImageUrl', auction?.itemImage);
+      }
       formData.append('startingBid', values.startingBid.toString());
       formData.append('currentBid', values.startingBid.toString());
       formData.append('sellerName', sellerName);

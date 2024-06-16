@@ -15,8 +15,6 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    await connectDB();
-
     const itemName = formData.get('itemName');
     const itemImage = formData.get('itemImage');
     const sellerName = formData.get('sellerName');
@@ -31,6 +29,8 @@ export async function POST(req: Request) {
       const cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(
         buffer
       );
+
+      await connectDB();
 
       const newAuction = new Auction({
         userId,
@@ -68,19 +68,21 @@ export async function PATCH(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    await connectDB();
-
     const itemName = formData.get('itemName');
     const itemImage = formData.get('itemImage');
     const type = formData.get('type');
     const auctionId = formData.get('auctionId');
+    const auctionImageUrl = formData.get('auctionImageUrl') as string;
     let cloudinarySecuredURL;
 
     if (itemImage && typeof itemImage === 'object') {
       const buffer = await itemImage.arrayBuffer();
+
+      if (auctionImageUrl) {
+        await cloudinaryService.deleteFromCloudinary(auctionImageUrl);
+      }
+
       cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(buffer);
-    } else {
-      console.log('No image provided for auction creation.');
     }
 
     try {
@@ -90,6 +92,7 @@ export async function PATCH(req: Request) {
         type,
       };
 
+      await connectDB();
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
       console.log('Auction updated successfully.');
       return new NextResponse(null, { status: 200 });
@@ -109,6 +112,7 @@ export async function DELETE(req: Request) {
     const userId = searchParams.get('userId');
     const auctionId = searchParams.get('auctionId');
     const auctionHasBidsString = searchParams.get('auctionHasBids');
+    const auctionImageUrl = searchParams.get('auctionImageUrl');
     const auctionHasBids = auctionHasBidsString === 'true';
 
     const loggedInUser = await authService.getLoggedInUser();
@@ -124,9 +128,12 @@ export async function DELETE(req: Request) {
       );
     }
 
-    await connectDB();
+    if (auctionImageUrl) {
+      await cloudinaryService.deleteFromCloudinary(auctionImageUrl);
+    }
 
     try {
+      await connectDB();
       await Auction.findByIdAndDelete(auctionId);
       console.log('Auction deleted successfully.');
       return new NextResponse(null, { status: 200 });

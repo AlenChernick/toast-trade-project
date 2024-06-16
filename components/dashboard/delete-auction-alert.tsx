@@ -18,7 +18,8 @@ const DeleteAuctionAlert: FC<{
   userId: string;
   auctionId: string;
   auctionHasBids: boolean;
-}> = ({ userId, auctionId, auctionHasBids }) => {
+  auctionImageUrl: string;
+}> = ({ userId, auctionId, auctionHasBids, auctionImageUrl }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -32,7 +33,7 @@ const DeleteAuctionAlert: FC<{
       }
 
       const response = await fetch(
-        `/api/dashboard/auction?userId=${userId}&auctionId=${auctionId}&auctionHasBids=${auctionHasBids}`,
+        `/api/dashboard/auction?userId=${userId}&auctionId=${auctionId}&auctionHasBids=${auctionHasBids}&auctionImageUrl=${auctionImageUrl}`,
         {
           method: 'DELETE',
         }
