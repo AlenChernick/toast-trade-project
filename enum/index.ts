@@ -7,7 +7,6 @@ export enum DashboardActionType {
 
 export enum AuctionStatus {
   Active = 'Active',
-  Ended = 'Ended',
   AwaitingPayment = 'Awaiting Payment',
   Completed = 'Completed',
 }

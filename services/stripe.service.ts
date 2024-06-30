@@ -1,7 +1,11 @@
-import { NextRequest } from 'next/server';
+import { loadStripe } from '@stripe/stripe-js';
 import Stripe from 'stripe';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY as string;
+const stripePublicKey = process.env
+  .NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string;
+
+const stripePromise = loadStripe(stripePublicKey);
 
 const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2024-04-10',
@@ -11,62 +15,19 @@ const stripe = new Stripe(stripeSecretKey, {
   },
 });
 
-const getStripeCheckoutSession = async (
-  req: Request,
-  userId: string,
-  productName: string,
-  priceAmount: number,
-  currency: string,
-  quantity: number
-) => {
-  try {
-    let product = (
-      await stripe.products.search({
-        query: `name:'${productName}'`,
-      })
-    ).data.find((item) => item.active);
+const createStripePaymentIntents = async (amount: number) => {
+  const { client_secret } = await stripe.paymentIntents.create({
+    amount,
+    currency: 'usd',
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
 
-    if (!product) {
-      product = await stripe.products.create({
-        name: productName,
-        description: productName,
-      });
-    }
-
-    let price = (
-      await stripe.prices.search({
-        query: `product:'${product.id}' AND currency:'${currency}'`,
-      })
-    ).data.find((item) => item.active);
-
-    if (!price) {
-      price = await stripe.prices.create({
-        product: product.id,
-        unit_amount: priceAmount * 100,
-        currency: currency,
-      });
-    }
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: price.id,
-          quantity: quantity,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${req.url}/?success=true&sessionId={CHECKOUT_SESSION_ID}&userId=${userId}`,
-      cancel_url: `${req.url}/?canceled=true`,
-    });
-
-    return session;
-  } catch (error) {
-    console.error((error as Error).message);
-    throw new Error('Failed to create Stripe checkout session');
-  }
+  return client_secret;
 };
 
 export const stripeService = {
-  getStripeCheckoutSession,
+  createStripePaymentIntents,
+  stripePromise,
 };

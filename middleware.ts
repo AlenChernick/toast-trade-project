@@ -27,7 +27,9 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some((route) =>
     path.startsWith(route)
   );
+
   const isPublicRoute = publicRoutes.includes(path);
+
   const isAuthPages =
     path.startsWith('/sign-in') || path.startsWith('/sign-up');
 

@@ -12,9 +12,9 @@ import {
 import { AuctionStatus, DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
-import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 import Image from 'next/image';
 import Link from 'next/link';
+import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
 
 const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
@@ -34,6 +34,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
           const isAuctionActive = new Date() < auctionEndTime;
           const auctionHasBids = auction.bids?.length > 0;
           const auctionImageUrl = auction.itemImage;
+          const isPaymentCompleted = auction.paymentCompleted;
 
           return (
             <Card
@@ -74,10 +75,13 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                       <em className='not-italic text-green-400'>
                         {AuctionStatus.Active}
                       </em>
-                    ) : (
+                    ) : !isAuctionActive && !isPaymentCompleted ? (
                       <em className='not-italic text-primary'>
-                        {' '}
-                        {AuctionStatus.Ended}
+                        {AuctionStatus.AwaitingPayment}
+                      </em>
+                    ) : (
+                      <em className='not-italic text-green-200'>
+                        {AuctionStatus.Completed}
                       </em>
                     )}
                   </span>

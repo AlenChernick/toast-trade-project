@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { getFormattedDateTimeString } from '@/lib/utils';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
-import Checkout from '@/components/dashboard/checkout';
+import CheckoutModal from '@/components/modals/checkout-modal';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -34,6 +34,7 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
           const isUserBidIsHighest = auction.bids.some(
             (bid) => bid.userId === userId && bid.bid === auction.currentBid
           );
+          const isPaymentCompleted = auction.paymentCompleted;
 
           return (
             <Card
@@ -74,10 +75,13 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
                       <em className='not-italic text-green-400'>
                         {AuctionStatus.Active}
                       </em>
-                    ) : (
+                    ) : !isAuctionActive && !isPaymentCompleted ? (
                       <em className='not-italic text-primary'>
-                        {' '}
-                        {AuctionStatus.Ended}
+                        {AuctionStatus.AwaitingPayment}
+                      </em>
+                    ) : (
+                      <em className='not-italic text-green-200'>
+                        {AuctionStatus.Completed}
                       </em>
                     )}
                   </span>
@@ -92,17 +96,19 @@ const UserBids: FC<{ userId: string }> = async ({ userId }) => {
                   src={auction.itemImage}
                   alt={auction.itemName}
                 />
-                {!isAuctionActive && isUserBidIsHighest && (
-                  <p className='text-center text-primary relative top-3'>
-                    You are the highest bidder!
-                  </p>
-                )}
+                {!isAuctionActive &&
+                  !isPaymentCompleted &&
+                  isUserBidIsHighest && (
+                    <p className='text-center text-primary relative top-3'>
+                      You are the highest bidder!
+                    </p>
+                  )}
               </CardContent>
               <CardFooter className='p-4 flex justify-between items-center relative bottom-0'>
                 <WatchBidsModal auctionBids={userBids} />
-                {!isAuctionActive && isUserBidIsHighest && (
-                  <Checkout auction={auction} userId={userId} />
-                )}
+                {!isAuctionActive &&
+                  !isPaymentCompleted &&
+                  isUserBidIsHighest && <CheckoutModal auction={auction} />}
               </CardFooter>
             </Card>
           );

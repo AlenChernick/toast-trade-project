@@ -18,5 +18,9 @@ export function getFormattedDateTimeString(date: Date) {
   return `${date.toDateString()} ${date.getHours()}:${date.getMinutes()}`;
 }
 
+export const convertToSubCurrency = (amount: number, factor = 100) => {
+  return Math.round(amount * factor);
+};
+
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
