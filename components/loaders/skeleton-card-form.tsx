@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-const SkeletonUserSettings = () => {
+const SkeletonCardForm = () => {
   return (
     <section>
       <Card className='lg:max-w-96 w-full md:max-w-80 m-auto'>
@@ -51,4 +51,4 @@ const SkeletonUserSettings = () => {
   );
 };
 
-export default SkeletonUserSettings;
+export default SkeletonCardForm;
