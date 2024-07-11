@@ -13,7 +13,7 @@ const Home: NextPage = async () => {
         Welcome to ToastTrade: Where Every Sip Tells a Story!
       </h1>
       <section className='w-full'>
-        {latestAuctions ? (
+        {latestAuctions?.length ? (
           <>
             <h2 className='md:text-2xl text-lg ml-4 mb-3'>Latest auctions</h2>
             <LatestAuctionsCarousel latestAuctions={latestAuctions} />

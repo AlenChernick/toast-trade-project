@@ -34,7 +34,7 @@ const UserDashboard: NextPage<{
   const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
 
   return (
-    <section className='flex flex-col md:flex-row'>
+    <section className='flex flex-col md:flex-row md:h-[45rem]'>
       <SideNavbar isEdit={isEdit} type={type} />
       {type === DashboardActionType.CreateOrEditAuction && (
         <CreateOrEditAuction

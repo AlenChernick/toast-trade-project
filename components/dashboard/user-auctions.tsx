@@ -97,7 +97,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   alt={auction.itemName}
                 />
               </CardContent>
-              <CardFooter className='p-4 flex justify-between items-center relative bottom-0'>
+              <CardFooter className='p-4 flex justify-between items-center'>
                 <Link
                   title={`Edit ${auction.itemName} auction`}
                   href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
