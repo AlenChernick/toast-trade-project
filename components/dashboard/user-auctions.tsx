@@ -9,13 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { AuctionStatus, DashboardActionType } from '@/enum';
+import { DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
+import AuctionBody from '@/components/dashboard/auction-body';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
   const auctionsList: AuctionType[] = await auctionService.getUserAuctions(
@@ -47,44 +48,13 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   </CardTitle>
                 </Link>
                 <CardDescription className='flex flex-col gap-1'>
-                  <span className='border-b-2 pb-1'>
-                    Auction seller: {auction.sellerName}
-                  </span>
-                  <span className='border-b-2 pb-1'>
-                    Alcohol type: {auction.type}
-                  </span>
-                  <span className='border-b-2 pb-1'>
-                    Starting bid: {auction.startingBid}$
-                  </span>
-                  <span className='border-b-2 pb-1'>
-                    Current bid: {auction.currentBid}$
-                  </span>
-                  <time
-                    className='border-b-2 pb-1'
-                    dateTime={auction.endTime.toString()}>
-                    Start date: {formattedStartTime}
-                  </time>
-                  <time
-                    className='border-b-2 pb-1'
-                    dateTime={auction.endTime.toString()}>
-                    End date: {formattedEndTime}
-                  </time>
-                  <span className='border-b-2 pb-1'>
-                    Status:{' '}
-                    {isAuctionActive ? (
-                      <em className='not-italic text-green-400'>
-                        {AuctionStatus.Active}
-                      </em>
-                    ) : !isAuctionActive && !isPaymentCompleted ? (
-                      <em className='not-italic text-primary'>
-                        {AuctionStatus.AwaitingPayment}
-                      </em>
-                    ) : (
-                      <em className='not-italic text-green-200'>
-                        {AuctionStatus.Completed}
-                      </em>
-                    )}
-                  </span>
+                  <AuctionBody
+                    auction={auction}
+                    formattedStartTime={formattedStartTime}
+                    formattedEndTime={formattedEndTime}
+                    isAuctionActive={isAuctionActive}
+                    isPaymentCompleted={isPaymentCompleted}
+                  />
                 </CardDescription>
               </CardHeader>
               <CardContent className='p-4 py-1'>

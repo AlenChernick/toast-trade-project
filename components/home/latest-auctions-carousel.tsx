@@ -13,26 +13,34 @@ import {
   CardDescription,
   CardTitle,
 } from '@/components/ui/card';
-import Image from 'next/image';
-import { type FC, useLayoutEffect, useState } from 'react';
-import { getFormattedDateTimeString, getTimeVariables } from '@/lib/utils';
+import { type FC, useLayoutEffect, useMemo, useState } from 'react';
+import {
+  calculateRemainingTimes,
+  getFormattedDateTimeString,
+  getTimeVariables,
+} from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import Link from 'next/link';
+import AuctionTimer from '@/components/auction/auction-timer';
+import AuctionItemBody from '@/components/auction/auction-item-body';
 
 const LatestAuctionsCarousel: FC<{
   latestAuctions: AuctionType[] | undefined;
 }> = ({ latestAuctions }) => {
-  const [timeRemaining, setTimeRemaining] = useState<number[]>([]);
+  const initialTimeRemaining = useMemo(
+    () => (latestAuctions ? calculateRemainingTimes(latestAuctions) : []),
+    [latestAuctions]
+  );
+
+  const [timeRemaining, setTimeRemaining] =
+    useState<number[]>(initialTimeRemaining);
 
   useLayoutEffect(() => {
     const updateTimer = () => {
-      const now = new Date().getTime();
-      const remainingTimes =
-        latestAuctions?.map((auction: AuctionType) => {
-          const auctionEndTime = new Date(auction.endTime);
-          const duration = auctionEndTime.getTime() - now;
-          return duration > 0 ? duration : 0;
-        }) ?? [];
+      const remainingTimes = latestAuctions
+        ? calculateRemainingTimes(latestAuctions)
+        : [];
       setTimeRemaining(remainingTimes);
     };
 
@@ -52,7 +60,7 @@ const LatestAuctionsCarousel: FC<{
             const formattedStartTime =
               getFormattedDateTimeString(auctionCreatedTime);
             const duration = timeRemaining[index];
-            const auctionEnded = duration <= 0;
+            const isAuctionEnded = duration <= 0;
             const displayCountdown = !isNaN(duration);
 
             let hours = 0;
@@ -83,73 +91,17 @@ const LatestAuctionsCarousel: FC<{
                         {auction.itemName}
                       </CardTitle>
                       <CardDescription className='flex flex-col'>
-                        <span className='md:md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            Seller name:{' '}
-                          </em>
-                          {auction.sellerName}
-                        </span>
-                        <span className='md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            Alcohol type:{' '}
-                          </em>
-                          {auction.type}
-                        </span>
-                        <span className='md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            Starting bid:{' '}
-                          </em>
-                          {auction.startingBid}$
-                        </span>
-                        <span className='md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            Current bid:{' '}
-                          </em>
-                          {auction.currentBid}$
-                        </span>
-                        <span className='md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            Start date:{' '}
-                          </em>
-                          <time>{formattedStartTime}</time>
-                        </span>
-                        <span className='md:text-lg text-md'>
-                          <em className='dark:text-white text-black not-italic'>
-                            End date:{' '}
-                          </em>
-                          <time>{formattedEndTime}</time>
-                        </span>
-                        <span
-                          className={`${
-                            displayCountdown ? 'opacity-100' : 'opacity-0'
-                          } transition-opacity duration-500 ease-in-out justify-center gap-2 flex-col mt-10 md:text-lg text-md flex items-center space-x-2`}>
-                          <em className='dark:text-white text-black not-italic md:text-2xl'>
-                            Time remaining
-                          </em>
-                          <time className='flex items-center space-x-1'>
-                            {auctionEnded ? (
-                              <span className='text-red-500 font-semibold'>
-                                Auction ended
-                              </span>
-                            ) : (
-                              <span className='flex items-center space-x-1'>
-                                <em className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
-                                  {hours < 10 ? `0${hours}h` : `${hours}h`}
-                                </em>
-                                <em className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
-                                  {minutes < 10
-                                    ? `0${minutes}m`
-                                    : `${minutes}m`}
-                                </em>
-                                <em className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
-                                  {seconds < 10
-                                    ? `0${seconds}s`
-                                    : `${seconds}s`}
-                                </em>
-                              </span>
-                            )}
-                          </time>
-                        </span>
+                        <AuctionItemBody
+                          auction={auction}
+                          formattedStartTime={formattedStartTime}
+                          formattedEndTime={formattedEndTime}
+                        />
+                        <AuctionTimer
+                          isAuctionEnded={isAuctionEnded}
+                          hours={hours}
+                          minutes={minutes}
+                          seconds={seconds}
+                        />
                         <Link
                           href={`/auction/${auction._id}`}
                           title={`View: ${auction.itemName}`}

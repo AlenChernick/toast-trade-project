@@ -13,11 +13,7 @@ const Auction = async ({ params }: { params: { auctionId: string } }) => {
 
   if (!auction) return notFound();
 
-  return (
-    <section className='flex'>
-      <AuctionItem auction={auction} loggedInUser={loggedInUser} />
-    </section>
-  );
+  return <AuctionItem auction={auction} loggedInUser={loggedInUser} />;
 };
 
 export default Auction;
