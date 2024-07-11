@@ -9,7 +9,10 @@ const Header = async () => {
   const loggedInUser = await authService.getLoggedInUser();
 
   return (
-    <header className='flex items-center justify-between md:px-5 px-2 py-3 shadow-md hover:shadow-lg transition-shadow duration-200 mb-6'>
+    <header
+      className='flex fixed w-full bg-background z-50 items-center justify-between 
+    md:px-5 px-2 py-3 shadow-lg md:shadow-md hover:shadow-lg
+     transition-shadow duration-200 dark:bg-[#313338]'>
       <section className='flex items-center gap-2'>
         <Link
           href='/'
@@ -22,30 +25,40 @@ const Header = async () => {
           <ThemeToggle />
         </span>
       </section>
-
-      {!loggedInUser ? (
-        <nav className='flex items-center gap-2'>
-          <Link href='/sign-in' title='Sign in'>
-            <Button className='md:h-10 md:px-4 md:py-2' size='sm' type='button'>
-              Sign in
-            </Button>
-          </Link>
-          <Link href='/sign-up' title='Sign up'>
-            <Button className='md:h-10 md:px-4 md:py-2' size='sm' type='button'>
-              Sign up
-            </Button>
-          </Link>
-        </nav>
-      ) : (
-        <nav className='flex items-center md:gap-5 gap-2'>
-          <Link href={`/dashboard/${loggedInUser._id}`} title='Dashboard'>
-            <Button className='md:h-10 md:px-4 md:py-2' size='sm' type='button'>
-              Dashboard
-            </Button>
-          </Link>
-          <SignOutButton />
-        </nav>
-      )}
+      <nav className='flex items-center md:gap-5 gap-2'>
+        {!loggedInUser ? (
+          <>
+            <Link href='/sign-in' title='Sign in'>
+              <Button
+                className='md:h-10 md:px-4 md:py-2'
+                size='sm'
+                type='button'>
+                Sign in
+              </Button>
+            </Link>
+            <Link href='/sign-up' title='Sign up'>
+              <Button
+                className='md:h-10 md:px-4 md:py-2'
+                size='sm'
+                type='button'>
+                Sign up
+              </Button>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href={`/dashboard/${loggedInUser._id}`} title='Dashboard'>
+              <Button
+                className='md:h-10 md:px-4 md:py-2'
+                size='sm'
+                type='button'>
+                Dashboard
+              </Button>
+            </Link>
+            <SignOutButton />
+          </>
+        )}
+      </nav>
     </header>
   );
 };

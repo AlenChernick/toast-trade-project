@@ -65,7 +65,7 @@
   }
 
   .main-container {
-    @apply flex flex-col md:px-5 px-2 flex-grow;
+    @apply flex flex-col md:px-5 px-2 flex-grow mt-20;
   }
 
   .text-active {
