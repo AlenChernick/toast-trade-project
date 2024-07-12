@@ -47,8 +47,6 @@ export async function PATCH(req: Request) {
       });
     }
 
-    await connectDB();
-
     try {
       const newBid: UserBid = {
         userId,
@@ -66,6 +64,7 @@ export async function PATCH(req: Request) {
         bids: auctionBids,
       };
 
+      await connectDB();
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
 
       console.log('Added new bid successfully.');

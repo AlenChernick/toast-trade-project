@@ -64,14 +64,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     authService.updateSession();
 
-    await connectDB();
-
     try {
       const updatedAuction = {
         paymentCompleted: true,
         paymentIntentId: paymentIntentId,
       };
 
+      await connectDB();
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
 
       const successUrl = new URL(`${AppRoutes.Dashboard}/${userId}`, req.url);
