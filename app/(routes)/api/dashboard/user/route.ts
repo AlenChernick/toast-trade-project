@@ -7,6 +7,11 @@ import connectDB from '@/services/db.service';
 export async function PATCH(req: Request) {
   try {
     const { userId, firstName, lastName, email, password } = await req.json();
+
+    if (!userId || !firstName || !lastName || !email || !password) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {

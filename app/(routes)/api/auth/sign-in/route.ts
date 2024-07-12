@@ -8,6 +8,10 @@ export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
 
+    if (!username || !password) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     await connectDB();
 
     const existingUser: UserType | null = await User.findOne({ username });

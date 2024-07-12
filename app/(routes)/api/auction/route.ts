@@ -17,6 +17,18 @@ export async function PATCH(req: Request) {
       isAuctionEnded,
     } = await req.json();
 
+    if (
+      !newBidValue ||
+      !userId ||
+      !auctionCreatorId ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !auctionId
+    ) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     if (isAuctionEnded) {
       return new NextResponse('Auction has ended', { status: 400 });
     }

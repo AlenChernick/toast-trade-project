@@ -17,6 +17,19 @@ export async function POST(req: Request) {
     const type = formData.get('type');
     let cloudinarySecuredURL;
 
+    if (
+      !userId ||
+      !auctionName ||
+      !itemImage ||
+      !sellerName ||
+      !endTime ||
+      !startingBid ||
+      !currentBid ||
+      !type
+    ) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
@@ -78,6 +91,10 @@ export async function PATCH(req: Request) {
     const auctionImageUrl = formData.get('auctionImageUrl') as string;
     let cloudinarySecuredURL;
 
+    if (!userId || !auctionName || !itemImage || !auctionId || !type) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     const loggedInUser = await authService.getLoggedInUser();
 
     if (loggedInUser?._id != userId) {
@@ -134,6 +151,16 @@ export async function DELETE(req: Request) {
     const auctionHasBidsString = searchParams.get('auctionHasBids');
     const auctionImageUrl = searchParams.get('auctionImageUrl');
     const auctionHasBids = auctionHasBidsString === 'true';
+
+    if (
+      !userId ||
+      !auctionId ||
+      !auctionHasBidsString ||
+      !auctionId ||
+      !auctionImageUrl
+    ) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
 
     const loggedInUser = await authService.getLoggedInUser();
 

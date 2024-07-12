@@ -8,6 +8,17 @@ export async function POST(req: Request) {
     const { username, firstName, lastName, email, birthday, password } =
       await req.json();
 
+    if (
+      !username ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !birthday ||
+      !password
+    ) {
+      return new NextResponse('Missing parameters', { status: 400 });
+    }
+
     await connectDB();
 
     const existingUsername: UserType | null = await User.findOne({ username });
