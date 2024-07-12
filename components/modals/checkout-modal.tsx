@@ -32,7 +32,7 @@ const CheckoutModal: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
           <DialogHeader className='mt-4'>
             <DialogTitle className='text-lg'>
               Checkout for{' '}
-              <span className='text-primary'>{auction.itemName}</span>
+              <span className='text-primary'>{auction.auctionName}</span>
             </DialogTitle>
           </DialogHeader>
           <Elements

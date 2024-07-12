@@ -1,13 +1,21 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/services/db.service';
 import { authService } from '@/services/auth.service';
-import { Auction } from '@/models/auction.model';
+import { Auction, AuctionType } from '@/models/auction.model';
 import { cloudinaryService } from '@/services/cloudinary.service';
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const userId = formData.get('userId');
+    const auctionName = formData.get('auctionName');
+    const itemImage = formData.get('itemImage');
+    const sellerName = formData.get('sellerName');
+    const endTime = formData.get('endTime');
+    const startingBid = formData.get('startingBid');
+    const currentBid = formData.get('currentBid');
+    const type = formData.get('type');
+    let cloudinarySecuredURL;
 
     const loggedInUser = await authService.getLoggedInUser();
 
@@ -15,40 +23,42 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const itemName = formData.get('itemName');
-    const itemImage = formData.get('itemImage');
-    const sellerName = formData.get('sellerName');
-    const endTime = formData.get('endTime');
-    const startingBid = formData.get('startingBid');
-    const currentBid = formData.get('currentBid');
-    const type = formData.get('type');
+    await connectDB();
+
+    const existingAuctionName: AuctionType | null = await Auction.findOne({
+      auctionName,
+    });
+
+    if (existingAuctionName) {
+      return new NextResponse('Auction name already exists', { status: 400 });
+    }
 
     if (itemImage && typeof itemImage === 'object') {
       const buffer = await itemImage.arrayBuffer();
 
-      const cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(
-        buffer
-      );
+      cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(buffer);
+    } else {
+      console.log('No image provided for auction creation.');
+    }
 
-      await connectDB();
-
+    try {
       const newAuction = new Auction({
         userId,
         itemImage: cloudinarySecuredURL,
         sellerName,
         currentBid,
-        itemName,
+        auctionName,
         endTime,
         startingBid,
         type,
       });
-
       await newAuction.save();
-    } else {
-      console.log('No image provided for auction creation.');
+      console.log('Auction created successfully.');
+      return new NextResponse(null, { status: 200 });
+    } catch (error) {
+      console.error('Error creating auction:', error);
+      return new NextResponse('Auction not found.', { status: 404 });
     }
-
-    return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.log('[POST:CREATE-AUCTION]', error);
     return new NextResponse('Internal Error', { status: 500 });
@@ -59,6 +69,12 @@ export async function PATCH(req: Request) {
   try {
     const formData = await req.formData();
     const userId = formData.get('userId');
+    const auctionName = formData.get('auctionName');
+    const itemImage = formData.get('itemImage');
+    const type = formData.get('type');
+    const auctionId = formData.get('auctionId');
+    const auctionImageUrl = formData.get('auctionImageUrl') as string;
+    let cloudinarySecuredURL;
 
     const loggedInUser = await authService.getLoggedInUser();
 
@@ -66,14 +82,17 @@ export async function PATCH(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const itemName = formData.get('itemName');
-    const itemImage = formData.get('itemImage');
-    const type = formData.get('type');
-    const auctionId = formData.get('auctionId');
-    const auctionImageUrl = formData.get('auctionImageUrl') as string;
-    let cloudinarySecuredURL;
+    await connectDB();
 
-    if (itemImage && typeof itemImage === 'object') {
+    const existingAuctionName: AuctionType | null = await Auction.findOne({
+      auctionName,
+    });
+
+    if (existingAuctionName) {
+      return new NextResponse('Auction name already exists', { status: 400 });
+    }
+
+    if (itemImage && typeof itemImage === 'object' && auctionImageUrl) {
       const buffer = await itemImage.arrayBuffer();
 
       if (auctionImageUrl) {
@@ -86,7 +105,7 @@ export async function PATCH(req: Request) {
     try {
       const updatedAuction = {
         itemImage: cloudinarySecuredURL,
-        itemName,
+        auctionName,
         type,
       };
 

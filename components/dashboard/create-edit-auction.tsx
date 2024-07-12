@@ -1,5 +1,5 @@
 'use client';
-import { type FC, useLayoutEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import type { AuctionType } from '@/models/auction.model';
 import { ApiRoutes, AppRoutes, DashboardActionType } from '@/enum';
 import { alcoholTypes } from '@/constants';
@@ -36,11 +36,11 @@ const CreateOrEditAuction: FC<{
   const isEdit = auction !== undefined;
 
   const formSchema = z.object({
-    itemName: z
+    auctionName: z
       .string()
-      .min(5, 'Item name must be at least 5 characters long.')
-      .max(80, 'Item name must be at most 50 characters long.')
-      .nonempty('Item name cannot be empty'),
+      .min(5, 'Auction name must be at least 5 characters long.')
+      .max(80, 'Auction name must be at most 50 characters long.')
+      .nonempty('Auction name cannot be empty'),
     itemImage: isEdit
       ? z.any()
       : z
@@ -87,7 +87,7 @@ const CreateOrEditAuction: FC<{
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      itemName: isEdit ? auction.itemName : '',
+      auctionName: isEdit ? auction.auctionName : '',
       itemImage: isEdit ? auction.itemImage : '',
       startingBid: isEdit ? auction.startingBid : 0,
       endTime: isEdit
@@ -103,10 +103,10 @@ const CreateOrEditAuction: FC<{
   const auctionEndTime = isEdit && new Date(auction?.endTime);
   const isAuctionActive = today < auctionEndTime;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isEdit) {
       form.reset({
-        itemName: '',
+        auctionName: '',
         itemImage: '',
         startingBid: 0,
         endTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
@@ -125,19 +125,20 @@ const CreateOrEditAuction: FC<{
     try {
       setIsLoading(true);
       const formData = new FormData();
-      formData.append('itemName', values.itemName);
+      formData.append('auctionName', values.auctionName);
       formData.append('itemImage', values.itemImage[0]);
-      if (isEdit && values.itemImage !== auction?.itemImage) {
-        formData.append('auctionImageUrl', auction?.itemImage);
-      }
       formData.append('startingBid', values.startingBid.toString());
       formData.append('currentBid', values.startingBid.toString());
       formData.append('sellerName', sellerName);
       formData.append('endTime', values.endTime);
       formData.append('type', values.type);
       formData.append('userId', userId);
+
       if (isEdit) {
         formData.append('auctionId', auction._id);
+        if (values.itemImage !== auction?.itemImage) {
+          formData.append('auctionImageUrl', auction?.itemImage);
+        }
       }
 
       const response = await fetch(ApiRoutes.DashboardAuction, {
@@ -146,12 +147,15 @@ const CreateOrEditAuction: FC<{
       });
 
       if (!response.ok) {
-        if (isEdit) {
-          toast.error('Failed to update auction.');
-          throw new Error('Failed to update auction');
+        const errorMessage = await response.text();
+
+        if (errorMessage.includes('name')) {
+          form.setError('auctionName', { message: errorMessage });
+          return;
         } else {
-          toast.error('Failed to create auction.');
-          throw new Error('Failed to create auction');
+          const action = isEdit ? 'update' : 'create';
+          toast.error(`Failed to ${action} auction.`);
+          throw new Error(`Failed to ${action} auction`);
         }
       }
 
@@ -184,11 +188,11 @@ const CreateOrEditAuction: FC<{
               className='flex flex-col justify-center m-auto gap-5'>
               <FormField
                 control={form.control}
-                name='itemName'
+                name='auctionName'
                 render={({ field }) => (
                   <>
                     <FormItem>
-                      <FormLabel>Item name</FormLabel>
+                      <FormLabel>Auction name</FormLabel>
                       <FormControl>
                         <Input
                           disabled={isLoading}

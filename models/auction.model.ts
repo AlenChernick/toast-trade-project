@@ -3,7 +3,7 @@ import { Schema, model, models, Types } from 'mongoose';
 export type AuctionType = {
   _id: string;
   userId: string;
-  itemName: string;
+  auctionName: string;
   itemImage: string;
   sellerName: string;
   startingBid: number;
@@ -45,9 +45,10 @@ const AuctionSchema = new Schema<AuctionType>(
       type: String,
       required: true,
     },
-    itemName: {
+    auctionName: {
       type: String,
       required: true,
+      unique: true,
     },
     itemImage: {
       type: String,

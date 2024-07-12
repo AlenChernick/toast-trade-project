@@ -56,9 +56,9 @@ const UserBids: FC<{
               <CardHeader className='p-4'>
                 <Link
                   href={`${AppRoutes.Auction}/${auction._id}`}
-                  title={auction.itemName}>
+                  title={auction.auctionName}>
                   <CardTitle className='leading-8 md:text-base text-xl hover:text-primary'>
-                    {auction.itemName}
+                    {auction.auctionName}
                   </CardTitle>
                 </Link>
                 <CardDescription className='flex flex-col gap-1'>
@@ -78,7 +78,7 @@ const UserBids: FC<{
                   width={900}
                   height={1200}
                   src={auction.itemImage}
-                  alt={auction.itemName}
+                  alt={auction.auctionName}
                 />
                 {!isAuctionActive && !isPaymentCompleted && (
                   <p className='text-center text-primary relative top-3'>

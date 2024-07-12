@@ -60,11 +60,11 @@ const AuctionItem: FC<{
             src={auction.itemImage}
             width={900}
             height={1200}
-            alt={auction.itemName}
+            alt={auction.auctionName}
           />
           <div className='flex flex-col gap-2'>
             <CardTitle className='md:text-3xl text-lg break-normal'>
-              {auction.itemName}
+              {auction.auctionName}
             </CardTitle>
             <CardDescription className='flex flex-col'>
               <AuctionItemBody

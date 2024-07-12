@@ -85,11 +85,11 @@ const LatestAuctionsCarousel: FC<{
                       src={auction.itemImage}
                       width={900}
                       height={1200}
-                      alt={auction.itemName}
+                      alt={auction.auctionName}
                     />
                     <div className='flex flex-col gap-2'>
                       <CardTitle className='md:text-3xl text-lg break-normal'>
-                        {auction.itemName}
+                        {auction.auctionName}
                       </CardTitle>
                       <CardDescription className='flex flex-col'>
                         <AuctionItemBody
@@ -105,7 +105,7 @@ const LatestAuctionsCarousel: FC<{
                         />
                         <Link
                           href={`${AppRoutes.Auction}/${auction._id}`}
-                          title={`View: ${auction.itemName}`}
+                          title={`View: ${auction.auctionName}`}
                           className='flex justify-center mt-10'>
                           <Button>View auction</Button>
                         </Link>

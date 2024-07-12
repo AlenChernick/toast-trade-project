@@ -44,9 +44,9 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
               <CardHeader className='p-4'>
                 <Link
                   href={`${AppRoutes.Auction}/${auction._id}`}
-                  title={auction.itemName}>
+                  title={auction.auctionName}>
                   <CardTitle className='leading-8 md:text-base text-xl hover:text-primary'>
-                    {auction.itemName}
+                    {auction.auctionName}
                   </CardTitle>
                 </Link>
                 <CardDescription className='flex flex-col gap-1'>
@@ -66,13 +66,13 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   width={900}
                   height={1200}
                   src={auction.itemImage}
-                  alt={auction.itemName}
+                  alt={auction.auctionName}
                 />
               </CardContent>
               <CardFooter className='p-4 flex justify-between items-center'>
                 {isAuctionActive && (
                   <Link
-                    title={`Edit ${auction.itemName} auction`}
+                    title={`Edit ${auction.auctionName} auction`}
                     href={`${AppRoutes.Dashboard}/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                     <Button variant='secondary'>Edit</Button>
                   </Link>
