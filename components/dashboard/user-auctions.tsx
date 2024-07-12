@@ -73,7 +73,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                   <Button variant='secondary'>Edit</Button>
                 </Link>
-                <WatchBidsModal auctionBids={auction.bids} />
+                <WatchBidsModal bids={auction.bids} />
                 <DeleteAuctionAlert
                   userId={userId}
                   auctionId={auction._id}

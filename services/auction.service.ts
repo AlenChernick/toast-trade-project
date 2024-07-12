@@ -119,8 +119,6 @@ const getUserBidsAuctions = async (userId: string) => {
   }
 };
 
-getUserBidsAuctions('662bf98a068d66ec0cfeb132');
-
 export const auctionService = {
   getUserAuctions,
   getUserAuction,

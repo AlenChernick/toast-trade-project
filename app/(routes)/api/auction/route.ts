@@ -11,6 +11,7 @@ export async function PATCH(req: Request) {
       auctionCreatorId,
       firstName,
       lastName,
+      email,
       auctionId,
       auctionBids,
       isAuctionEnded,
@@ -39,6 +40,7 @@ export async function PATCH(req: Request) {
         userId,
         firstName,
         lastName,
+        email,
         bid: newBidValue,
         createdAt: new Date(),
       };
@@ -51,6 +53,7 @@ export async function PATCH(req: Request) {
       };
 
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
+
       console.log('Added new bid successfully.');
       return new NextResponse(null, { status: 200 });
     } catch (error) {

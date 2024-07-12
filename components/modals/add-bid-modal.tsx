@@ -23,12 +23,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import type { JWTPayload } from 'jose';
 import type { AuctionType } from '@/models/auction.model';
+import type { JwtUser } from '@/models/user.model';
 import Link from 'next/link';
 
 const AddBidModal: FC<{
-  loggedInUser: JWTPayload | undefined;
+  loggedInUser: JwtUser | undefined;
   auction: AuctionType;
 }> = ({ loggedInUser, auction }) => {
   const currentBid = auction.currentBid;
@@ -68,6 +68,7 @@ const AddBidModal: FC<{
       const userId = loggedInUser?._id;
       const firstName = loggedInUser?.firstName;
       const lastName = loggedInUser?.lastName;
+      const email = loggedInUser?.email;
       const auctionId = auction._id;
       const auctionCreatorId = auction.userId;
       const auctionBids = auction.bids;
@@ -100,6 +101,7 @@ const AddBidModal: FC<{
           auctionCreatorId,
           firstName,
           lastName,
+          email,
           auctionId,
           auctionBids,
         }),

@@ -58,7 +58,7 @@ const UserDashboard: NextPage<{
         <Suspense
           key={DashboardActionType.UserBids}
           fallback={<SkeletonCardsLoader />}>
-          <UserBids userId={userId} />
+          <UserBids userId={userId} loggedInUser={loggedInUser} />
         </Suspense>
       )}
       {type === DashboardActionType.UserSettings && (

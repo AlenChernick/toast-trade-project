@@ -3,7 +3,6 @@ import type { UserBid } from '@/models/auction.model';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -11,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-const WatchBidsModal: FC<{ auctionBids: UserBid[] }> = ({ auctionBids }) => {
+const WatchBidsModal: FC<{ bids: UserBid[] }> = ({ bids }) => {
   return (
     <section className='flex justify-center'>
       <Dialog>
@@ -25,12 +24,12 @@ const WatchBidsModal: FC<{ auctionBids: UserBid[] }> = ({ auctionBids }) => {
             <DialogTitle>Watch Bids</DialogTitle>
           </DialogHeader>
           <div>
-            {auctionBids.length ? (
+            {bids.length ? (
               <ScrollArea className='h-96 px-5'>
-                {auctionBids.map((bid) => (
+                {bids.map((bid) => (
                   <ul
                     key={bid._id}
-                    className='flex flex-col items-center gap-2 border-2 border-primary mb-4 last:mb-0 p-2'>
+                    className='flex flex-col items-center rounded-lg gap-2 border-2 border-primary mb-4 last:mb-0 p-2'>
                     <li>{`Bid by: ${bid.firstName} ${bid.lastName}`}</li>
                     <li>{`Bid value: ${bid.bid}$`}</li>
                   </ul>

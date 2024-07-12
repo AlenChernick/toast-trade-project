@@ -15,19 +15,38 @@ const stripe = new Stripe(stripeSecretKey, {
   },
 });
 
-const createStripePaymentIntents = async (amount: number) => {
+const createStripePaymentIntents = async (
+  amount: number,
+  email: string,
+  fullName: string,
+  username: string,
+  title: string
+) => {
   const { client_secret } = await stripe.paymentIntents.create({
     amount,
     currency: 'usd',
+    receipt_email: email,
     automatic_payment_methods: {
       enabled: true,
+    },
+    metadata: {
+      title,
+      email,
+      fullName,
+      username,
     },
   });
 
   return client_secret;
 };
 
+const getStripePaymentIntent = async (paymentIntentId: string) => {
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  return paymentIntent;
+};
+
 export const stripeService = {
   createStripePaymentIntents,
+  getStripePaymentIntent,
   stripePromise,
 };

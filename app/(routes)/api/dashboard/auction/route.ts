@@ -37,8 +37,6 @@ export async function POST(req: Request) {
         itemImage: cloudinarySecuredURL,
         sellerName,
         currentBid,
-        paymentCompleted: false,
-        bids: [],
         itemName,
         endTime,
         startingBid,

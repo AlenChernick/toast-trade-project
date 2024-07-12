@@ -9,8 +9,9 @@ export type AuctionType = {
   startingBid: number;
   currentBid: number;
   paymentCompleted: boolean;
-  type: string;
+  paymentIntentId: string;
   bids: UserBid[];
+  type: string;
   endTime: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -21,6 +22,7 @@ export type UserBid = {
   userId: string;
   firstName: string;
   lastName: string;
+  email: string;
   bid: number;
   createdAt: Date;
 };
@@ -33,6 +35,7 @@ const BidSchema = new Schema<UserBid>({
   userId: String,
   firstName: String,
   lastName: String,
+  email: String,
   bid: Number,
 });
 
@@ -64,14 +67,18 @@ const AuctionSchema = new Schema<AuctionType>(
     },
     paymentCompleted: {
       type: Boolean,
-      required: true,
+      default: false,
     },
-    type: {
+    paymentIntentId: {
       type: String,
-      required: true,
+      default: '',
     },
     bids: {
       type: [BidSchema],
+      default: [],
+    },
+    type: {
+      type: String,
       required: true,
     },
     endTime: {

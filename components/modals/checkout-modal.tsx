@@ -1,5 +1,6 @@
 'use client';
 import type { FC } from 'react';
+import type { JwtUser } from '@/models/user.model';
 import { Button } from '@/components/ui/button';
 import { AuctionType } from '@/models/auction.model';
 import {
@@ -15,10 +16,11 @@ import { Elements } from '@stripe/react-stripe-js';
 import { useTheme } from 'next-themes';
 import CheckoutForm from '@/components/dashboard/checkout-form';
 
-const CheckoutModal: FC<{ auction: AuctionType }> = ({ auction }) => {
+const CheckoutModal: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
+  auction,
+  loggedInUser,
+}) => {
   const { theme } = useTheme();
-  const auctionId = auction._id;
-  const auctionBid = auction.currentBid;
 
   return (
     <section className='flex items-center justify-center'>
@@ -37,14 +39,14 @@ const CheckoutModal: FC<{ auction: AuctionType }> = ({ auction }) => {
             stripe={stripeService.stripePromise}
             options={{
               mode: 'payment',
-              amount: convertToSubCurrency(auctionBid),
+              amount: convertToSubCurrency(auction.currentBid),
               currency: 'usd',
               locale: 'en',
               appearance: {
                 theme: theme === 'dark' ? 'night' : 'stripe',
               },
             }}>
-            <CheckoutForm amount={auctionBid} auctionId={auctionId} />
+            <CheckoutForm auction={auction} loggedInUser={loggedInUser} />
           </Elements>
         </DialogContent>
       </Dialog>

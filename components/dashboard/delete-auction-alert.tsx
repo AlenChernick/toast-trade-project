@@ -55,28 +55,37 @@ const DeleteAuctionAlert: FC<{
     }
   };
   return (
-    <AlertDialog>
-      <AlertDialogTrigger
-        disabled={isLoading}
-        className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'>
-        Delete
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            auction and remove its data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AlertDialogAction disabled={isLoading} onClick={handleDeleteAuction}>
-            Continue
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <section className='flex items-center justify-center'>
+      <AlertDialog>
+        <AlertDialogTrigger
+          disabled={isLoading}
+          className='inline-flex items-center justify-center whitespace-nowrap
+           rounded-md text-sm font-medium ring-offset-background
+            transition-colors focus-visible:outline-none focus-visible:ring-
+            2 focus-visible:ring-ring focus-visible:ring-offset-2
+             disabled:pointer-events-none disabled:opacity-50
+              bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'>
+          Delete
+        </AlertDialogTrigger>
+        <AlertDialogContent className='w-11/12'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              auction and remove its data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className='gap-2 md:gap-0'>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isLoading}
+              onClick={handleDeleteAuction}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </section>
   );
 };
 
