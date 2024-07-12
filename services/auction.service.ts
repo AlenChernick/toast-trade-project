@@ -76,9 +76,9 @@ const getAuction = async (auctionId: string) => {
 
 const getLatestAuctions = async () => {
   try {
-    await connectDB();
-
     const currentTime = new Date();
+
+    await connectDB();
 
     const auctions: AuctionType[] = await Auction.find({
       endTime: { $gt: currentTime },
@@ -98,8 +98,14 @@ const getLatestAuctions = async () => {
   }
 };
 
-const getUserBidsAuctions = async (userId: string) => {
+const getUserAuctionsBids = async (userId: string) => {
   try {
+    const loggedInUser = await authService.getLoggedInUser();
+
+    if (loggedInUser?._id !== userId) {
+      throw new Error('Unauthorized');
+    }
+
     await connectDB();
 
     const userBidsAuctions: AuctionType[] = await Auction.find({
@@ -119,10 +125,86 @@ const getUserBidsAuctions = async (userId: string) => {
   }
 };
 
+const getUserActiveAuctions = async (
+  userId: string
+): Promise<AuctionType[]> => {
+  try {
+    const loggedInUser = await authService.getLoggedInUser();
+
+    if (loggedInUser?._id !== userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const currentTime = new Date();
+
+    await connectDB();
+
+    const activeAuctions: AuctionType[] = await Auction.find({
+      userId,
+      endTime: { $gt: currentTime },
+    }).lean();
+
+    return activeAuctions;
+  } catch (error) {
+    console.error((error as Error).message);
+    throw new Error('Failed to get active auctions for user');
+  }
+};
+
+const getUserActiveBids = async (userId: string): Promise<AuctionType[]> => {
+  try {
+    const loggedInUser = await authService.getLoggedInUser();
+
+    if (loggedInUser?._id !== userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const currentTime = new Date();
+
+    await connectDB();
+
+    const userActiveBids: AuctionType[] = await Auction.find({
+      bids: { $elemMatch: { userId } },
+      endTime: { $gt: currentTime },
+    }).lean();
+
+    return userActiveBids;
+  } catch (error) {
+    console.error((error as Error).message);
+    throw new Error('Failed to get active auctions with user bids');
+  }
+};
+
+const checkUserActiveAuctionsOrBids = async (
+  userId: string
+): Promise<boolean> => {
+  try {
+    const loggedInUser = await authService.getLoggedInUser();
+
+    if (loggedInUser?._id !== userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const [userActiveAuctions, userActiveBids] = await Promise.all([
+      getUserActiveAuctions(userId),
+      getUserActiveBids(userId),
+    ]);
+
+    const isUserHaveActiveAuctionsOrBids =
+      userActiveAuctions.length > 0 || userActiveBids.length > 0;
+
+    return isUserHaveActiveAuctionsOrBids;
+  } catch (error) {
+    console.error((error as Error).message);
+    throw new Error('Failed to check for user active auctions or bids');
+  }
+};
+
 export const auctionService = {
   getUserAuctions,
   getUserAuction,
   getAuction,
   getLatestAuctions,
-  getUserBidsAuctions,
+  getUserAuctionsBids,
+  checkUserActiveAuctionsOrBids,
 };

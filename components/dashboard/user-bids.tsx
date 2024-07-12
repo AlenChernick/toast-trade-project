@@ -24,7 +24,7 @@ const UserBids: FC<{
   loggedInUser: JwtUser;
 }> = async ({ userId, loggedInUser }) => {
   const userBidsAuctions: AuctionType[] =
-    await auctionService.getUserBidsAuctions(userId);
+    await auctionService.getUserAuctionsBids(userId);
 
   return (
     <section className='grid place-items-center md:place-items-start md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>

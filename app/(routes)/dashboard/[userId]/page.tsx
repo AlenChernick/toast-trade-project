@@ -23,15 +23,22 @@ const UserDashboard: NextPage<{
   const loggedInUser = (await authService.getLoggedInUser()) as JwtUser;
   const isEdit = auctionId !== undefined;
   let auction: AuctionType | undefined;
+  let isUserHaveActiveAuctionsOrBids: boolean | undefined;
 
   if (userId !== loggedInUser?._id) return notFound();
+
+  const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
 
   if (isEdit) {
     auction = await auctionService.getUserAuction(userId, auctionId);
     if (!auction) return notFound();
   }
 
-  const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
+  if (type === DashboardActionType.UserSettings) {
+    isUserHaveActiveAuctionsOrBids =
+      await auctionService.checkUserActiveAuctionsOrBids(userId);
+    if (isUserHaveActiveAuctionsOrBids === undefined) return notFound();
+  }
 
   return (
     <section className='flex flex-col md:flex-row md:h-[45rem]'>
@@ -65,7 +72,10 @@ const UserDashboard: NextPage<{
         <Suspense
           key={DashboardActionType.UserSettings}
           fallback={<SkeletonCardForm />}>
-          <UserSettings loggedInUser={loggedInUser} />
+          <UserSettings
+            loggedInUser={loggedInUser}
+            isUserHaveActiveAuctionsOrBids={isUserHaveActiveAuctionsOrBids}
+          />
         </Suspense>
       )}
     </section>

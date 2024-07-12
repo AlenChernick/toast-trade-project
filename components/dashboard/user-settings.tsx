@@ -5,6 +5,10 @@ import type { JwtUser } from '@/models/user.model';
 import { ApiRoutes, AppRoutes } from '@/enum';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -19,13 +23,11 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Eye, EyeOff } from 'lucide-react';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import DeleteUserAlert from '@/components/alerts/delete-user-alert';
 
 const formSchema = z
   .object({
@@ -46,7 +48,10 @@ const formSchema = z
     path: ['confirmPassword'],
   });
 
-const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
+const UserSettings: FC<{
+  loggedInUser: JwtUser;
+  isUserHaveActiveAuctionsOrBids: boolean | undefined;
+}> = ({ loggedInUser, isUserHaveActiveAuctionsOrBids }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean[]>([false, false]);
@@ -71,15 +76,12 @@ const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
         },
         body: JSON.stringify({ ...values, userId: loggedInUser._id }),
       });
+
       if (!response.ok) {
-        const errorMessage = await response.text();
-        if (errorMessage.includes('password')) {
-          form.setError('password', { message: errorMessage });
-          return;
-        } else {
-          throw new Error(errorMessage || 'Something went wrong');
-        }
+        toast.error(`Failed to update user.`);
+        throw new Error(`Failed to update user`);
       }
+
       toast.success('Updated user successfully.');
       router.push(`${AppRoutes.Dashboard}/${loggedInUser._id}`);
       router.refresh();
@@ -235,9 +237,17 @@ const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
                   </FormItem>
                 )}
               />
-              <Button disabled={isLoading} type='submit'>
-                Update user
-              </Button>
+              <CardFooter className='flex w-full justify-between p-0'>
+                <Button variant='secondary' disabled={isLoading} type='submit'>
+                  Update user
+                </Button>
+                <DeleteUserAlert
+                  userId={loggedInUser._id}
+                  isUserHaveActiveAuctionsOrBids={
+                    isUserHaveActiveAuctionsOrBids
+                  }
+                />
+              </CardFooter>
             </form>
           </Form>
         </CardContent>

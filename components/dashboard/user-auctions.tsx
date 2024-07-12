@@ -12,7 +12,7 @@ import {
 import { AppRoutes, DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
-import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
+import DeleteAuctionAlert from '@/components/alerts/delete-auction-alert';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
 import AuctionBody from '@/components/dashboard/auction-body';
 import Image from 'next/image';
