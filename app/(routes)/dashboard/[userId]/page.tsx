@@ -13,6 +13,7 @@ import SideNavbar from '@/components/dashboard/side-navbar';
 import UserSettings from '@/components/dashboard/user-settings';
 import SkeletonCardsLoader from '@/components/loaders/skeleton-cards-loader';
 import SkeletonCardForm from '@/components/loaders/skeleton-card-form';
+import MainDashboard from '@/components/dashboard/main-dashboard';
 
 const UserDashboard: NextPage<{
   params: { userId: string };
@@ -51,6 +52,11 @@ const UserDashboard: NextPage<{
   return (
     <section className='flex flex-col md:flex-row md:h-[45rem]'>
       <SideNavbar isEdit={isEdit} type={type} userId={userId} />
+      {type === undefined && (
+        <Suspense fallback={<SkeletonCardsLoader />}>
+          <MainDashboard />
+        </Suspense>
+      )}
       {type === DashboardActionType.CreateOrEditAuction && (
         <Suspense
           key={DashboardActionType.CreateOrEditAuction}
