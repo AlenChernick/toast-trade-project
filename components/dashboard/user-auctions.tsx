@@ -68,18 +68,22 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                 />
               </CardContent>
               <CardFooter className='p-4 flex justify-between items-center'>
-                <Link
-                  title={`Edit ${auction.itemName} auction`}
-                  href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
-                  <Button variant='secondary'>Edit</Button>
-                </Link>
+                {isAuctionActive && (
+                  <Link
+                    title={`Edit ${auction.itemName} auction`}
+                    href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
+                    <Button variant='secondary'>Edit</Button>
+                  </Link>
+                )}
                 <WatchBidsModal bids={auction.bids} />
-                <DeleteAuctionAlert
-                  userId={userId}
-                  auctionId={auction._id}
-                  auctionHasBids={auctionHasBids}
-                  auctionImageUrl={auctionImageUrl}
-                />
+                {isAuctionActive && (
+                  <DeleteAuctionAlert
+                    userId={userId}
+                    auctionId={auction._id}
+                    auctionHasBids={auctionHasBids}
+                    auctionImageUrl={auctionImageUrl}
+                  />
+                )}
               </CardFooter>
             </Card>
           );

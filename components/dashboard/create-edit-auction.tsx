@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useLayoutEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -35,6 +35,7 @@ const CreateOrEditAuction: FC<{
   auction?: AuctionType | undefined;
 }> = ({ userId, sellerName, auction }) => {
   const isEdit = auction !== undefined;
+
   const formSchema = z.object({
     itemName: z
       .string()
@@ -100,8 +101,10 @@ const CreateOrEditAuction: FC<{
   const today = new Date();
   const minDate = format(today, "yyyy-MM-dd'T'HH:mm");
   const maxDate = format(addDays(today, 3), "yyyy-MM-dd'T'HH:mm");
+  const auctionEndTime = isEdit && new Date(auction?.endTime);
+  const isAuctionActive = today < auctionEndTime;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isEdit) {
       form.reset({
         itemName: '',
@@ -110,8 +113,14 @@ const CreateOrEditAuction: FC<{
         endTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
         type: '',
       });
+    } else {
+      if (!isAuctionActive) {
+        router.push(
+          `/dashboard/${userId}/?type=${DashboardActionType.UserAuctions}`
+        );
+      }
     }
-  }, [isEdit, form]);
+  }, [isEdit, form, isAuctionActive, router, userId]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -166,7 +175,7 @@ const CreateOrEditAuction: FC<{
     <section>
       <Card className='rounded-lg border bg-card text-card-foreground shadow-sm lg:max-w-96 w-full md:max-w-80 m-auto'>
         <CardHeader>
-          <CardTitle>{`${isEdit ? 'Edit' : 'Create'}`} Auction</CardTitle>
+          <CardTitle>{isEdit ? 'Edit' : 'Create'} Auction</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>

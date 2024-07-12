@@ -1,6 +1,6 @@
 'use client';
 import type { AuctionType } from '@/models/auction.model';
-import type { JWTPayload } from 'jose';
+import type { JwtUser } from '@/models/user.model';
 import { useState, useLayoutEffect, useMemo, type FC } from 'react';
 import {
   Card,
@@ -20,7 +20,7 @@ import AuctionItemBody from '@/components/auction/auction-item-body';
 
 const AuctionItem: FC<{
   auction: AuctionType;
-  loggedInUser: JWTPayload | undefined;
+  loggedInUser: JwtUser | undefined;
 }> = ({ auction, loggedInUser }) => {
   const auctionEndTime = useMemo(
     () => new Date(auction.endTime),

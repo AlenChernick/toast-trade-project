@@ -1,5 +1,5 @@
 'use client';
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useLayoutEffect, useState } from 'react';
 import type { AuctionType } from '@/models/auction.model';
 import type { JwtUser } from '@/models/user.model';
 import { convertToSubCurrency } from '@/lib/utils';
@@ -33,7 +33,7 @@ const CheckoutForm: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStripeLoading, setIsStripeLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetch('/api/checkout', {
       method: 'POST',
       headers: {
@@ -53,7 +53,7 @@ const CheckoutForm: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
         setClientSecret(data.clientSecret);
         setIsStripeLoading(false);
       });
-  }, [amount]);
+  }, [amount, auctionTitle, userEmail, userFullName, userId, username]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
