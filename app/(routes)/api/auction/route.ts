@@ -27,6 +27,8 @@ export async function PATCH(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    authService.updateSession();
+
     if (auctionCreatorId === userId) {
       return new NextResponse('Cannot add bit your own auction', {
         status: 403,

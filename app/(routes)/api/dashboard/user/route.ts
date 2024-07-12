@@ -13,6 +13,8 @@ export async function PATCH(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    authService.updateSession();
+
     const hashedPassword = await bcrypt.hash(password, 14);
 
     await connectDB();

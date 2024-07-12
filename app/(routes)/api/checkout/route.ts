@@ -27,6 +27,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    authService.updateSession();
+
     const clientSecret = await stripeService.createStripePaymentIntents(
       amount,
       userEmail,
@@ -50,8 +52,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const auctionId = searchParams.get('auctionId');
     const paymentIntentId = searchParams.get('payment_intent');
 
-    console.log('paymentIntentId:', paymentIntentId);
-
     if (!amountParam || !userId || !auctionId || !paymentIntentId) {
       return new NextResponse('Missing parameters', { status: 400 });
     }
@@ -61,6 +61,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    authService.updateSession();
 
     await connectDB();
 

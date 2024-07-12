@@ -23,6 +23,8 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    authService.updateSession();
+
     await connectDB();
 
     const existingAuctionName: AuctionType | null = await Auction.findOne({
@@ -82,6 +84,8 @@ export async function PATCH(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    authService.updateSession();
+
     await connectDB();
 
     const existingAuctionName: AuctionType | null = await Auction.findOne({
@@ -109,7 +113,6 @@ export async function PATCH(req: Request) {
         type,
       };
 
-      await connectDB();
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
       console.log('Auction updated successfully.');
       return new NextResponse(null, { status: 200 });
@@ -137,6 +140,8 @@ export async function DELETE(req: Request) {
     if (loggedInUser?._id != userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
+
+    authService.updateSession();
 
     if (auctionHasBids) {
       return new NextResponse(
