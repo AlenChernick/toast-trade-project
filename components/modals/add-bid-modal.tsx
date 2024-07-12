@@ -1,4 +1,7 @@
 import { type FC, useState } from 'react';
+import type { AuctionType } from '@/models/auction.model';
+import type { JwtUser } from '@/models/user.model';
+import { ApiRoutes, AppRoutes } from '@/enum';
 import {
   Dialog,
   DialogContent,
@@ -23,8 +26,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import type { AuctionType } from '@/models/auction.model';
-import type { JwtUser } from '@/models/user.model';
 import Link from 'next/link';
 
 const AddBidModal: FC<{
@@ -89,7 +90,7 @@ const AddBidModal: FC<{
         return;
       }
 
-      const response = await fetch('/api/auction', {
+      const response = await fetch(ApiRoutes.Auction, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +192,7 @@ const AddBidModal: FC<{
             <DialogFooter>
               <div className='flex gap-4 justify-center'>
                 <DialogClose>Cancel</DialogClose>
-                <Link href='/sign-in' title='Sign in'>
+                <Link href={AppRoutes.SignIn} title='Sign in'>
                   <Button>Sign In</Button>
                 </Link>
               </div>

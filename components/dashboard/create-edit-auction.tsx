@@ -1,5 +1,8 @@
 'use client';
-
+import { type FC, useLayoutEffect, useState } from 'react';
+import type { AuctionType } from '@/models/auction.model';
+import { ApiRoutes, AppRoutes, DashboardActionType } from '@/enum';
+import { alcoholTypes } from '@/constants';
 import { addDays, format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +20,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { type FC, useLayoutEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -25,9 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { alcoholTypes } from '@/constants';
-import { DashboardActionType } from '@/enum';
-import type { AuctionType } from '@/models/auction.model';
 
 const CreateOrEditAuction: FC<{
   userId: string;
@@ -116,7 +115,7 @@ const CreateOrEditAuction: FC<{
     } else {
       if (!isAuctionActive) {
         router.push(
-          `/dashboard/${userId}/?type=${DashboardActionType.UserAuctions}`
+          `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.UserAuctions}`
         );
       }
     }
@@ -141,7 +140,7 @@ const CreateOrEditAuction: FC<{
         formData.append('auctionId', auction._id);
       }
 
-      const response = await fetch('/api/dashboard/auction', {
+      const response = await fetch(ApiRoutes.DashboardAuction, {
         method: isEdit ? 'PATCH' : 'POST',
         body: formData,
       });
@@ -159,7 +158,7 @@ const CreateOrEditAuction: FC<{
       toast.success(`Auction ${isEdit ? 'updated' : 'created'} successfully.`);
 
       router.push(
-        `/dashboard/${userId}/?type=${DashboardActionType.UserAuctions}`
+        `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.UserAuctions}`
       );
       router.refresh();
     } catch (error) {

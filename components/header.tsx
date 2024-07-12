@@ -1,9 +1,10 @@
-import Link from 'next/link';
+import { AppRoutes } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { authService } from '@/services/auth.service';
 import { Beer } from 'lucide-react';
 import SignOutButton from './sign-out-button';
+import Link from 'next/link';
 
 const Header = async () => {
   const loggedInUser = await authService.getLoggedInUser();
@@ -28,7 +29,7 @@ const Header = async () => {
       <nav className='flex items-center md:gap-5 gap-2'>
         {!loggedInUser ? (
           <>
-            <Link href='/sign-in' title='Sign in'>
+            <Link href={AppRoutes.SignIn} title='Sign in'>
               <Button
                 className='md:h-10 md:px-4 md:py-2'
                 size='sm'
@@ -36,7 +37,7 @@ const Header = async () => {
                 Sign in
               </Button>
             </Link>
-            <Link href='/sign-up' title='Sign up'>
+            <Link href={AppRoutes.SignUp} title='Sign up'>
               <Button
                 className='md:h-10 md:px-4 md:py-2'
                 size='sm'
@@ -47,7 +48,9 @@ const Header = async () => {
           </>
         ) : (
           <>
-            <Link href={`/dashboard/${loggedInUser._id}`} title='Dashboard'>
+            <Link
+              href={`${AppRoutes.Dashboard}/${loggedInUser._id}`}
+              title='Dashboard'>
               <Button
                 className='md:h-10 md:px-4 md:py-2'
                 size='sm'

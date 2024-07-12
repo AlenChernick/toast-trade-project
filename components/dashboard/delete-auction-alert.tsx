@@ -1,4 +1,8 @@
 'use client';
+import { type FC, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ApiRoutes } from '@/enum';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,9 +14,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useRouter } from 'next/navigation';
-import { type FC, useState } from 'react';
-import { toast } from 'sonner';
 
 const DeleteAuctionAlert: FC<{
   userId: string;
@@ -33,7 +34,7 @@ const DeleteAuctionAlert: FC<{
       }
 
       const response = await fetch(
-        `/api/dashboard/auction?userId=${userId}&auctionId=${auctionId}&auctionHasBids=${auctionHasBids}&auctionImageUrl=${auctionImageUrl}`,
+        `${ApiRoutes.DashboardAuction}?userId=${userId}&auctionId=${auctionId}&auctionHasBids=${auctionHasBids}&auctionImageUrl=${auctionImageUrl}`,
         {
           method: 'DELETE',
         }

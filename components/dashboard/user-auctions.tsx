@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { DashboardActionType } from '@/enum';
+import { AppRoutes, DashboardActionType } from '@/enum';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTimeString } from '@/lib/utils';
 import DeleteAuctionAlert from '@/components/dashboard/delete-auction-alert';
@@ -42,7 +42,9 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
               key={auction._id}
               className='w-full md:max-w-[320px] md:h-full'>
               <CardHeader className='p-4'>
-                <Link href={`/auction/${auction._id}`} title={auction.itemName}>
+                <Link
+                  href={`${AppRoutes.Auction}/${auction._id}`}
+                  title={auction.itemName}>
                   <CardTitle className='leading-8 md:text-base text-xl hover:text-primary'>
                     {auction.itemName}
                   </CardTitle>
@@ -71,7 +73,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                 {isAuctionActive && (
                   <Link
                     title={`Edit ${auction.itemName} auction`}
-                    href={`/dashboard/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
+                    href={`${AppRoutes.Dashboard}/${userId}?type=${DashboardActionType.CreateOrEditAuction}&auctionId=${auction._id}`}>
                     <Button variant='secondary'>Edit</Button>
                   </Link>
                 )}

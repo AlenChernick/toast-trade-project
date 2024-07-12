@@ -1,6 +1,7 @@
 'use client';
 
 import type { NextPage } from 'next';
+import { ApiRoutes, AppRoutes } from '@/enum';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -74,7 +75,7 @@ const SignUp: NextPage = () => {
 
     try {
       setIsLoading(true);
-      const response = await fetch('/api/auth/sign-up', {
+      const response = await fetch(ApiRoutes.AuthSignUp, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ const SignUp: NextPage = () => {
       }
 
       toast.success('Signed up successfully.');
-      router.push('/sign-in');
+      router.push(AppRoutes.SignIn);
     } catch (error) {
       setIsLoading(false);
       toast.error('Something went wrong.');
@@ -286,7 +287,7 @@ const SignUp: NextPage = () => {
         <CardFooter className='flex justify-center gap-1 text-sm'>
           <span>Already registered?</span>
           <Link
-            href='/sign-in'
+            href={AppRoutes.SignIn}
             title='Sign in'
             className='text-[#a1a1aa] font-semibold'>
             Sign in

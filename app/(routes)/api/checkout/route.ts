@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripeService } from '@/services/stripe.service';
 import { authService } from '@/services/auth.service';
 import { Auction } from '@/models/auction.model';
-import { DashboardActionType } from '@/enum';
+import { AppRoutes, DashboardActionType } from '@/enum';
 import connectDB from '@/services/db.service';
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
 
-      const successUrl = new URL(`/dashboard/${userId}`, req.url);
+      const successUrl = new URL(`${AppRoutes.Dashboard}/${userId}`, req.url);
       successUrl.searchParams.set('type', DashboardActionType.UserBids);
       successUrl.searchParams.set('success', 'true');
       successUrl.searchParams.set('paymentIntentId', paymentIntentId);

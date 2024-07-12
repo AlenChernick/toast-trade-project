@@ -1,7 +1,8 @@
 'use client';
+import { useState } from 'react';
+import { ApiRoutes } from '@/enum';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 const SignOutButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -10,7 +11,7 @@ const SignOutButton = () => {
   const handleSignOut = async () => {
     try {
       setIsLoading(true);
-      await fetch('/api/auth/sign-in', {
+      await fetch(ApiRoutes.AuthSignIn, {
         method: 'DELETE',
       });
       router.refresh();

@@ -1,6 +1,7 @@
 'use client';
 
 import type { NextPage } from 'next';
+import { ApiRoutes, AppRoutes } from '@/enum';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -51,7 +52,7 @@ const SignIn: NextPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/auth/sign-in', {
+      const response = await fetch(ApiRoutes.AuthSignIn, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ const SignIn: NextPage = () => {
         <CardFooter className='flex justify-center gap-1 text-sm'>
           <span>New to ToastTrade?</span>
           <Link
-            href='/sign-up'
+            href={AppRoutes.SignUp}
             title='Join now'
             className='text-[#a1a1aa] font-semibold'>
             Join now

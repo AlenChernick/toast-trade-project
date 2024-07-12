@@ -2,6 +2,7 @@
 import { type FC, useLayoutEffect, useState } from 'react';
 import type { AuctionType } from '@/models/auction.model';
 import type { JwtUser } from '@/models/user.model';
+import { ApiRoutes } from '@/enum';
 import { convertToSubCurrency } from '@/lib/utils';
 import {
   PaymentElement,
@@ -34,7 +35,7 @@ const CheckoutForm: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
   const [isStripeLoading, setIsStripeLoading] = useState<boolean>(true);
 
   useLayoutEffect(() => {
-    fetch('/api/checkout', {
+    fetch(ApiRoutes.Checkout, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ const CheckoutForm: FC<{ auction: AuctionType; loggedInUser: JwtUser }> = ({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `${originUrl}/api/checkout?amount=${amount}&userId=${userId}&auctionId=${auctionId}`,
+        return_url: `${originUrl}${ApiRoutes.Checkout}?amount=${amount}&userId=${userId}&auctionId=${auctionId}`,
       },
     });
 

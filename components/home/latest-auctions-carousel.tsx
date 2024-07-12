@@ -1,5 +1,7 @@
 'use client';
+import { type FC, useLayoutEffect, useMemo, useState } from 'react';
 import type { AuctionType } from '@/models/auction.model';
+import { AppRoutes } from '@/enum';
 import {
   Carousel,
   CarouselContent,
@@ -13,7 +15,6 @@ import {
   CardDescription,
   CardTitle,
 } from '@/components/ui/card';
-import { type FC, useLayoutEffect, useMemo, useState } from 'react';
 import {
   calculateRemainingTimes,
   getFormattedDateTimeString,
@@ -103,7 +104,7 @@ const LatestAuctionsCarousel: FC<{
                           seconds={seconds}
                         />
                         <Link
-                          href={`/auction/${auction._id}`}
+                          href={`${AppRoutes.Auction}/${auction._id}`}
                           title={`View: ${auction.itemName}`}
                           className='flex justify-center mt-10'>
                           <Button>View auction</Button>

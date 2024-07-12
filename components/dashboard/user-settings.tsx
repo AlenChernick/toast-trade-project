@@ -2,6 +2,7 @@
 
 import { type FC, useState } from 'react';
 import type { JwtUser } from '@/models/user.model';
+import { ApiRoutes, AppRoutes } from '@/enum';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -63,7 +64,7 @@ const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/dashboard/user', {
+      const response = await fetch(ApiRoutes.DashboardUser, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ const UserSettings: FC<{ loggedInUser: JwtUser }> = ({ loggedInUser }) => {
         }
       }
       toast.success('Updated user successfully.');
-      router.push(`/dashboard/${loggedInUser._id}`);
+      router.push(`${AppRoutes.Dashboard}/${loggedInUser._id}`);
       router.refresh();
     } catch (error) {
       setIsLoading(false);

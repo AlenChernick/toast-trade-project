@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authService } from '@/services/auth.service';
+import { ApiRoutes, AppRoutes } from '@/enum';
 
 const allowedOrigins = [
   'http://localhost:3000',
+  'https://localhost:3000',
   'http://10.0.0.1:3000',
   'https://checkout.stripe.com',
   'https://hooks.stripe.com',
@@ -13,15 +15,19 @@ const corsOptions = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-const protectedRoutes = ['/dashboard'];
-const publicRoutes = ['/sign-in', '/sign-up', '/'];
+const protectedRoutes: AppRoutes[] = [AppRoutes.Dashboard];
+const publicRoutes: AppRoutes[] = [
+  AppRoutes.Home,
+  AppRoutes.SignIn,
+  AppRoutes.SignUp,
+];
 
 export async function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV === 'development';
-  const path = request.nextUrl.pathname;
+  const path = request.nextUrl.pathname as AppRoutes;
   const method = request.method;
   const origin = isDev
-    ? 'http://localhost:3000'
+    ? 'https://localhost:3000' || 'http://localhost:3000'
     : request.headers.get('origin') ?? '';
 
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -31,24 +37,24 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.includes(path);
 
   const isAuthPages =
-    path.startsWith('/sign-in') || path.startsWith('/sign-up');
+    path.startsWith(AppRoutes.SignIn) || path.startsWith(AppRoutes.SignUp);
 
   const loggedInUser = await authService.getLoggedInUser();
   const userId = loggedInUser?._id;
 
   if (isProtectedRoute && !userId) {
-    return NextResponse.redirect(new URL('/sign-in', request.nextUrl));
+    return NextResponse.redirect(new URL(AppRoutes.SignIn, request.nextUrl));
   }
 
   if (isAuthPages && loggedInUser) {
-    return NextResponse.redirect(new URL('/', request.nextUrl));
+    return NextResponse.redirect(new URL(AppRoutes.Home, request.nextUrl));
   }
 
   if (isPublicRoute) {
     return NextResponse.next();
   }
 
-  if (path.startsWith('/api')) {
+  if (path.startsWith(ApiRoutes.Api)) {
     const isAllowedOrigin = allowedOrigins.includes(origin);
 
     const isPreflight = method === 'OPTIONS';

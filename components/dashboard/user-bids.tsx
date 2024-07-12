@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import type { AuctionType } from '@/models/auction.model';
 import type { JwtUser } from '@/models/user.model';
 import { auctionService } from '@/services/auction.service';
+import { AppRoutes } from '@/enum';
 import {
   Card,
   CardContent,
@@ -53,7 +54,9 @@ const UserBids: FC<{
               key={auction._id}
               className='w-full md:max-w-[320px] md:h-full'>
               <CardHeader className='p-4'>
-                <Link href={`/auction/${auction._id}`} title={auction.itemName}>
+                <Link
+                  href={`${AppRoutes.Auction}/${auction._id}`}
+                  title={auction.itemName}>
                   <CardTitle className='leading-8 md:text-base text-xl hover:text-primary'>
                     {auction.itemName}
                   </CardTitle>
