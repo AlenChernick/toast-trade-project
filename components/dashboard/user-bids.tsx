@@ -15,16 +15,9 @@ import { getFormattedDateTimeString } from '@/lib/utils';
 import WatchBidsModal from '@/components/modals/watch-bids-modal';
 import CheckoutModal from '@/components/modals/checkout-modal';
 import AuctionBody from '@/components/dashboard/auction-body';
-import dynamic from 'next/dynamic';
+import CheckoutReceiptModal from '@/components/modals/checkout-receipt-modal';
 import Image from 'next/image';
 import Link from 'next/link';
-
-const CheckoutReceiptModal = dynamic(
-  () => import('@/components/modals/checkout-receipt-modal'),
-  {
-    ssr: false,
-  }
-);
 
 const UserBids: FC<{
   userId: string;

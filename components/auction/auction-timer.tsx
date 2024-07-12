@@ -23,7 +23,9 @@ const AuctionTimer: FC<{
             <em className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
               {minutes < 10 ? `0${minutes}m` : `${minutes}m`}
             </em>
-            <em className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
+            <em
+              suppressHydrationWarning
+              className='not-italic md:text-2xl text-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-2 px-3 rounded-lg'>
               {seconds < 10 ? `0${seconds}s` : `${seconds}s`}
             </em>
           </span>
