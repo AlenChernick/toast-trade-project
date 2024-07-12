@@ -74,7 +74,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       await Auction.findByIdAndUpdate(auctionId, updatedAuction);
 
       const successUrl = new URL(`${AppRoutes.Dashboard}/${userId}`, req.url);
-      successUrl.searchParams.set('type', DashboardActionType.UserBids);
+      successUrl.searchParams.set('type', DashboardActionType.Bids);
       successUrl.searchParams.set('success', 'true');
       successUrl.searchParams.set('paymentIntentId', paymentIntentId);
 

@@ -1,8 +1,8 @@
 export enum DashboardActionType {
   CreateOrEditAuction = 'createOrEditAuction',
-  UserAuctions = 'userAuctions',
-  UserBids = 'userBids',
-  UserSettings = 'userSettings',
+  Auctions = 'auctions',
+  Bids = 'bids',
+  Settings = 'settings',
 }
 
 export enum AuctionStatus {

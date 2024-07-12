@@ -22,6 +22,10 @@ const UserDashboard: NextPage<{
   const { type, auctionId } = searchParams;
   const loggedInUser = (await authService.getLoggedInUser()) as JwtUser;
   const isEdit = auctionId !== undefined;
+  const DashboardActionTypesArray = Object.values(DashboardActionType);
+  const isValidType = DashboardActionTypesArray.includes(
+    type as DashboardActionType
+  );
   let auction: AuctionType | undefined;
   let isUserHaveActiveAuctionsOrBids: boolean | undefined;
 
@@ -29,12 +33,16 @@ const UserDashboard: NextPage<{
 
   const sellerName = `${loggedInUser.firstName} ${loggedInUser.lastName}`;
 
+  if (!isValidType && type !== undefined) {
+    return notFound();
+  }
+
   if (isEdit) {
     auction = await auctionService.getUserAuction(userId, auctionId);
     if (!auction) return notFound();
   }
 
-  if (type === DashboardActionType.UserSettings) {
+  if (type === DashboardActionType.Settings) {
     isUserHaveActiveAuctionsOrBids =
       await auctionService.checkUserActiveAuctionsOrBids(userId);
     if (isUserHaveActiveAuctionsOrBids === undefined) return notFound();
@@ -42,7 +50,7 @@ const UserDashboard: NextPage<{
 
   return (
     <section className='flex flex-col md:flex-row md:h-[45rem]'>
-      <SideNavbar isEdit={isEdit} type={type} />
+      <SideNavbar isEdit={isEdit} type={type} userId={userId} />
       {type === DashboardActionType.CreateOrEditAuction && (
         <Suspense
           key={DashboardActionType.CreateOrEditAuction}
@@ -54,23 +62,23 @@ const UserDashboard: NextPage<{
           />
         </Suspense>
       )}
-      {type === DashboardActionType.UserAuctions && (
+      {type === DashboardActionType.Auctions && (
         <Suspense
-          key={DashboardActionType.UserAuctions}
+          key={DashboardActionType.Auctions}
           fallback={<SkeletonCardsLoader />}>
           <UserAuctions userId={userId} />
         </Suspense>
       )}
-      {type === DashboardActionType.UserBids && (
+      {type === DashboardActionType.Bids && (
         <Suspense
-          key={DashboardActionType.UserBids}
+          key={DashboardActionType.Bids}
           fallback={<SkeletonCardsLoader />}>
           <UserBids userId={userId} loggedInUser={loggedInUser} />
         </Suspense>
       )}
-      {type === DashboardActionType.UserSettings && (
+      {type === DashboardActionType.Settings && (
         <Suspense
-          key={DashboardActionType.UserSettings}
+          key={DashboardActionType.Settings}
           fallback={<SkeletonCardForm />}>
           <UserSettings
             loggedInUser={loggedInUser}

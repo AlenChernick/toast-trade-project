@@ -115,7 +115,7 @@ const CreateOrEditAuction: FC<{
     } else {
       if (!isAuctionActive) {
         router.push(
-          `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.UserAuctions}`
+          `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.Auctions}`
         );
       }
     }
@@ -162,7 +162,7 @@ const CreateOrEditAuction: FC<{
       toast.success(`Auction ${isEdit ? 'updated' : 'created'} successfully.`);
 
       router.push(
-        `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.UserAuctions}`
+        `${AppRoutes.Dashboard}/${userId}/?type=${DashboardActionType.Auctions}`
       );
       router.refresh();
     } catch (error) {

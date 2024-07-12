@@ -65,11 +65,15 @@
   }
 
   .main-container {
-    @apply flex flex-col md:px-5 px-2 flex-grow mt-20;
+    @apply flex flex-col md:px-5 px-2 flex-grow mt-[4.7rem] md:mt-20;
   }
 
-  .text-active {
-    @apply text-primary transition duration-200;
+  .nav-active {
+    @apply md:mr-5 py-2 px-4 rounded-xl bg-primary shadow-md dark:bg-popover transition duration-200 ease-in-out;
+  }
+
+  .side-nav-text {
+    @apply md:mr-5 py-2 px-4 dark:text-white text-black;
   }
 
   .input {
