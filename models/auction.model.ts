@@ -32,11 +32,30 @@ const BidSchema = new Schema<UserBid>({
     type: Schema.Types.ObjectId,
     default: () => new Types.ObjectId(),
   },
-  userId: String,
-  firstName: String,
-  lastName: String,
-  email: String,
-  bid: Number,
+  userId: {
+    type: String,
+    required: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  bid: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
 });
 
 const AuctionSchema = new Schema<AuctionType>(
@@ -87,7 +106,7 @@ const AuctionSchema = new Schema<AuctionType>(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 export const Auction =
