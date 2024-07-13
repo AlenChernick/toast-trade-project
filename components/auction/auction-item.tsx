@@ -57,7 +57,7 @@ const AuctionItem: FC<{
           <Image
             priority
             className='md:h-[570px] w-[470px] lg:m-0 m-auto h-auto md:mb-0 mb-4 rounded-md aspect-w-10:12'
-            src={auction.itemImage}
+            src={auction.auctionImage}
             width={900}
             height={1200}
             alt={auction.auctionName}

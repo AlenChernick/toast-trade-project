@@ -34,7 +34,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
             getFormattedDateTimeString(auctionStartTime);
           const isAuctionActive = new Date() < auctionEndTime;
           const auctionHasBids = auction.bids?.length > 0;
-          const auctionImageUrl = auction.itemImage;
+          const auctionImageUrl = auction.auctionImage;
           const isPaymentCompleted = auction.paymentCompleted;
 
           return (
@@ -65,7 +65,7 @@ const UserAuctions: FC<{ userId: string }> = async ({ userId }) => {
                   className='object-contain rounded-md'
                   width={900}
                   height={1200}
-                  src={auction.itemImage}
+                  src={auction.auctionImage}
                   alt={auction.auctionName}
                 />
               </CardContent>

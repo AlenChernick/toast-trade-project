@@ -70,7 +70,7 @@ const UserBids: FC<{
                   className='object-contain rounded-md'
                   width={900}
                   height={1200}
-                  src={auction.itemImage}
+                  src={auction.auctionImage}
                   alt={auction.auctionName}
                 />
                 {!isAuctionActive && !isPaymentCompleted && (

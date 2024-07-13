@@ -4,7 +4,7 @@ export type AuctionType = {
   _id: string;
   userId: string;
   auctionName: string;
-  itemImage: string;
+  auctionImage: string;
   sellerName: string;
   startingBid: number;
   currentBid: number;
@@ -69,7 +69,7 @@ const AuctionSchema = new Schema<AuctionType>(
       required: true,
       unique: true,
     },
-    itemImage: {
+    auctionImage: {
       type: String,
       required: true,
     },

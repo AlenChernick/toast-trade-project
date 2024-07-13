@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const userId = formData.get('userId');
     const auctionName = formData.get('auctionName');
-    const itemImage = formData.get('itemImage');
+    const auctionImage = formData.get('auctionImage');
     const sellerName = formData.get('sellerName');
     const endTime = formData.get('endTime');
     const startingBid = formData.get('startingBid');
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     if (
       !userId ||
       !auctionName ||
-      !itemImage ||
+      !auctionImage ||
       !sellerName ||
       !endTime ||
       !startingBid ||
@@ -48,8 +48,8 @@ export async function POST(req: Request) {
       return new NextResponse('Auction name already exists', { status: 400 });
     }
 
-    if (itemImage && typeof itemImage === 'object') {
-      const buffer = await itemImage.arrayBuffer();
+    if (auctionImage && typeof auctionImage === 'object') {
+      const buffer = await auctionImage.arrayBuffer();
 
       cloudinarySecuredURL = await cloudinaryService.uploadToCloudinary(buffer);
     } else {
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     try {
       const newAuction = new Auction({
         userId,
-        itemImage: cloudinarySecuredURL,
+        auctionImage: cloudinarySecuredURL,
         sellerName,
         currentBid,
         auctionName,
@@ -85,13 +85,13 @@ export async function PATCH(req: Request) {
     const formData = await req.formData();
     const userId = formData.get('userId');
     const auctionName = formData.get('auctionName');
-    const itemImage = formData.get('itemImage');
+    const auctionImage = formData.get('auctionImage');
     const type = formData.get('type');
     const auctionId = formData.get('auctionId');
     const auctionImageUrl = formData.get('auctionImageUrl') as string;
     let cloudinarySecuredURL;
 
-    if (!userId || !auctionName || !itemImage || !auctionId || !type) {
+    if (!userId || !auctionName || !auctionImage || !auctionId || !type) {
       return new NextResponse('Missing parameters', { status: 400 });
     }
 
@@ -107,14 +107,15 @@ export async function PATCH(req: Request) {
 
     const existingAuctionName: AuctionType | null = await Auction.findOne({
       auctionName,
+      _id: { $ne: auctionId },
     });
 
     if (existingAuctionName) {
       return new NextResponse('Auction name already exists', { status: 400 });
     }
 
-    if (itemImage && typeof itemImage === 'object' && auctionImageUrl) {
-      const buffer = await itemImage.arrayBuffer();
+    if (auctionImage && typeof auctionImage === 'object' && auctionImageUrl) {
+      const buffer = await auctionImage.arrayBuffer();
 
       if (auctionImageUrl) {
         await cloudinaryService.deleteFromCloudinary(auctionImageUrl);
@@ -125,7 +126,7 @@ export async function PATCH(req: Request) {
 
     try {
       const updatedAuction = {
-        itemImage: cloudinarySecuredURL,
+        auctionImage: cloudinarySecuredURL,
         auctionName,
         type,
       };

@@ -41,7 +41,7 @@ const CreateOrEditAuction: FC<{
       .min(5, 'Auction name must be at least 5 characters long.')
       .max(80, 'Auction name must be at most 50 characters long.')
       .nonempty('Auction name cannot be empty'),
-    itemImage: isEdit
+    auctionImage: isEdit
       ? z.any()
       : z
           .any()
@@ -88,7 +88,7 @@ const CreateOrEditAuction: FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {
       auctionName: isEdit ? auction.auctionName : '',
-      itemImage: isEdit ? auction.itemImage : '',
+      auctionImage: isEdit ? auction.auctionImage : '',
       startingBid: isEdit ? auction.startingBid : 0,
       endTime: isEdit
         ? format(new Date(auction.endTime), "yyyy-MM-dd'T'HH:mm")
@@ -96,7 +96,7 @@ const CreateOrEditAuction: FC<{
       type: isEdit ? auction.type : '',
     },
   });
-  const imageFileRef = form.register('itemImage');
+  const imageFileRef = form.register('auctionImage');
   const today = new Date();
   const minDate = format(today, "yyyy-MM-dd'T'HH:mm");
   const maxDate = format(addDays(today, 3), "yyyy-MM-dd'T'HH:mm");
@@ -107,7 +107,7 @@ const CreateOrEditAuction: FC<{
     if (!isEdit) {
       form.reset({
         auctionName: '',
-        itemImage: '',
+        auctionImage: '',
         startingBid: 0,
         endTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
         type: '',
@@ -126,7 +126,7 @@ const CreateOrEditAuction: FC<{
       setIsLoading(true);
       const formData = new FormData();
       formData.append('auctionName', values.auctionName);
-      formData.append('itemImage', values.itemImage[0]);
+      formData.append('auctionImage', values.auctionImage[0]);
       formData.append('startingBid', values.startingBid.toString());
       formData.append('currentBid', values.startingBid.toString());
       formData.append('sellerName', sellerName);
@@ -136,8 +136,8 @@ const CreateOrEditAuction: FC<{
 
       if (isEdit) {
         formData.append('auctionId', auction._id);
-        if (values.itemImage !== auction?.itemImage) {
-          formData.append('auctionImageUrl', auction?.itemImage);
+        if (values.auctionImage !== auction?.auctionImage) {
+          formData.append('auctionImageUrl', auction?.auctionImage);
         }
       }
 
@@ -210,7 +210,7 @@ const CreateOrEditAuction: FC<{
               />
               <FormField
                 control={form.control}
-                name='itemImage'
+                name='auctionImage'
                 render={({ field }) => (
                   <FormItem className='relative'>
                     <FormLabel>Image</FormLabel>
